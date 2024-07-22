@@ -28,13 +28,41 @@
         /// </summary>
         private void InitializeComponent()
         {
+            panelOpciones = new Panel();
+            panelVentana = new Panel();
+            panelSesion = new Panel();
             SuspendLayout();
+            // 
+            // panelOpciones
+            // 
+            panelOpciones.Location = new Point(12, 138);
+            panelOpciones.Name = "panelOpciones";
+            panelOpciones.Size = new Size(178, 291);
+            panelOpciones.TabIndex = 1;
+            // 
+            // panelVentana
+            // 
+            panelVentana.Location = new Point(196, 12);
+            panelVentana.Name = "panelVentana";
+            panelVentana.Size = new Size(496, 417);
+            panelVentana.TabIndex = 2;
+            // 
+            // panelSesion
+            // 
+            panelSesion.Location = new Point(12, 12);
+            panelSesion.Name = "panelSesion";
+            panelSesion.Size = new Size(178, 120);
+            panelSesion.TabIndex = 4;
             // 
             // Inicio
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(704, 441);
+            Controls.Add(panelSesion);
+            Controls.Add(panelVentana);
+            Controls.Add(panelOpciones);
+            IsMdiContainer = true;
             Name = "Inicio";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Inicio";
@@ -42,5 +70,9 @@
         }
 
         #endregion
+
+        private Panel panelOpciones;
+        private Panel panelVentana;
+        private Panel panelSesion;
     }
 }

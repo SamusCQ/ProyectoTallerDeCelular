@@ -1,32 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using proyectoFinalPOE.Controlador;
 using proyectoFinalPOE.Modelo;
-using proyectoFinalPOE.Controlador;
+using proyectoFinalPOE.Repositorio;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace proyectoFinalPOE.Negocio
 {
     public class UsuarioService
     {
-        private DatabaseHelper databaseHelper;
+        private readonly UsuarioRepository usuarioRepository;
 
-        public UsuarioService()
+        public UsuarioService(DatabaseHelper databaseHelper)
         {
-            databaseHelper = new DatabaseHelper();
+            usuarioRepository = new UsuarioRepository(databaseHelper);
         }
 
         public List<Usuario> ObtenerUsuarios()
         {
-            return databaseHelper.GetUsuarios();
+            return usuarioRepository.GetUsuarios();
         }
 
         public bool VerificarCredenciales(string nombreUsuario, string clave)
         {
-            var usuarios = databaseHelper.GetUsuarios();
+            var usuarios = usuarioRepository.GetUsuarios();
             return usuarios.Any(u => u.NombreUsuario == nombreUsuario && u.Clave == clave);
         }
 
         public List<UserRole> GetUserRoles(string username, string password)
         {
-            return databaseHelper.GetUserRoles(username, password);
+            return usuarioRepository.GetUserRoles(username, password);
         }
     }
 }

@@ -5,18 +5,22 @@ using proyectoFinalPOE.Vista;
 using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;
-using static proyectoFinalPOE.Controlador.DatabaseHelper;
 
 namespace proyectoFinalPOE
 {
     public partial class Principal : Form
     {
         private UsuarioService usuarioService;
+        private DatabaseHelper databaseHelper;
 
         public Principal()
         {
             InitializeComponent();
-            usuarioService = new UsuarioService();
+            databaseHelper = new DatabaseHelper();
+            usuarioService = new UsuarioService(databaseHelper);
+
+            var usuarios = usuarioService.ObtenerUsuarios();
+            this.FormClosing += new FormClosingEventHandler(Principal_FormClosing);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -60,11 +64,14 @@ namespace proyectoFinalPOE
             }
         }
 
-
-
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void Principal_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
