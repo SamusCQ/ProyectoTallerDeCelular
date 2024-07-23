@@ -77,16 +77,10 @@ namespace proyectoFinalPOE.Vista
         {
             try
             {
-                // Asume que los UserControls están en el namespace `proyectoFinalPOE.Vista`
                 Type type = Type.GetType("proyectoFinalPOE.Vista." + viewPath);
                 if (type != null)
                 {
-                    // Aquí se pasa databaseHelper al constructor del UserControl
-                    if (type == typeof(ClienteControl))
-                    {
-                        return (UserControl)Activator.CreateInstance(type, new object[] { databaseHelper, panelVentana });
-                    }
-                    return (UserControl)Activator.CreateInstance(type, new object[] { databaseHelper });
+                    return (UserControl)Activator.CreateInstance(type, new object[] { databaseHelper, panelVentana });
                 }
                 else
                 {

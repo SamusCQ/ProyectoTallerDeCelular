@@ -64,7 +64,6 @@
             txtCedula.Name = "txtCedula";
             txtCedula.Size = new Size(166, 23);
             txtCedula.TabIndex = 2;
-            txtCedula.TextChanged += txtCedula_TextChanged;
             // 
             // txtCelular
             // 
@@ -136,7 +135,6 @@
             label3.Size = new Size(44, 15);
             label3.TabIndex = 8;
             label3.Text = "Cedula";
-            label3.Click += label3_Click;
             // 
             // label2
             // 

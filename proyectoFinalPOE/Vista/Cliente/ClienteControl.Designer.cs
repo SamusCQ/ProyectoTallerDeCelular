@@ -50,6 +50,7 @@
             txtBuscarNombre.Name = "txtBuscarNombre";
             txtBuscarNombre.Size = new Size(190, 23);
             txtBuscarNombre.TabIndex = 1;
+            txtBuscarNombre.KeyDown += txtBuscarNombre_KeyDown_1;
             // 
             // btnBuscar
             // 

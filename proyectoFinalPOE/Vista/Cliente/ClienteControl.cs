@@ -38,14 +38,6 @@ namespace proyectoFinalPOE.Vista
             PersonalizarDataGridView();
         }
 
-        private void txtBuscarNombre_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                btnBuscar.PerformClick();
-            }
-        }
-
         private void btnCrear_Click(object sender, EventArgs e)
         {
             NuevoClienteControl nuevoClienteControl = new NuevoClienteControl(databaseHelper, panelVentana);
@@ -80,6 +72,14 @@ namespace proyectoFinalPOE.Vista
 
             // Eliminar la columna de selección de filas
             dgvClientes.RowHeadersVisible = false;
+        }
+
+        private void txtBuscarNombre_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnBuscar.PerformClick();
+            }
         }
     }
 }

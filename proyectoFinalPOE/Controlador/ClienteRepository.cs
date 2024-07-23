@@ -3,6 +3,7 @@ using proyectoFinalPOE.Controlador;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace proyectoFinalPOE.Repositorio
 {
@@ -50,7 +51,7 @@ namespace proyectoFinalPOE.Repositorio
             List<Cliente> clientes = new List<Cliente>();
             using (SqlConnection connection = databaseHelper.GetConnection())
             {
-                string query = "SELECT idCliente, nombre, apellido, nu_cedula, nu_celular, correo, bd_est, nombre_completo FROM CLIENTE WHERE nombre LIKE @nombre";
+                string query = "SELECT idCliente, nombre, apellido, nu_cedula, nu_celular, correo, bd_est, nombre_completo FROM CLIENTE WHERE nombre_completo LIKE @nombre";
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@nombre", "%" + nombre + "%");
                 connection.Open();
@@ -76,6 +77,25 @@ namespace proyectoFinalPOE.Repositorio
             return clientes;
         }
 
+
+        public void GuardarCliente(Cliente cliente)
+        {
+            using (SqlConnection connection = databaseHelper.GetConnection())
+            {
+                string query = "sp_GuardarCliente";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@nombre", cliente.Nombre);
+                command.Parameters.AddWithValue("@apellido", cliente.Apellido);
+                command.Parameters.AddWithValue("@nu_cedula", cliente.NuCedula);
+                command.Parameters.AddWithValue("@nu_celular", cliente.NuCelular);
+                command.Parameters.AddWithValue("@correo", cliente.Correo);
+                command.Parameters.AddWithValue("@bd_est", cliente.BdEst);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
 
 
 
