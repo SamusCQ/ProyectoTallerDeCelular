@@ -27,15 +27,32 @@ namespace proyectoFinalPOE.Vista
         {
             List<Opcion> opciones = opcionRepository.GetOpcionesByRol(userRole);
 
-            foreach (Opcion opcion in opciones)
+            // Calcular el total de botones y el espacio requerido
+            int totalBotones = opciones.Count;
+            int buttonHeight = 30;
+            int spacing = 10;
+            int totalHeight = (buttonHeight + spacing) * totalBotones - spacing;
+
+            // Calcular la posición inicial para centrar los botones
+            int startY = (panelOpciones.Height - totalHeight) / 2;
+
+            for (int i = 0; i < opciones.Count; i++)
             {
+                Opcion opcion = opciones[i];
+
                 Button btn = new Button();
                 btn.Text = opcion.Descripcion;
                 btn.Tag = opcion.ViewPath;
                 btn.Click += new EventHandler(OpcionButton_Click);
+
+                // Ajustar la posición del botón
+                btn.Size = new Size(panelOpciones.Width - 20, buttonHeight);
+                btn.Location = new Point(10, startY + (buttonHeight + spacing) * i);
+
                 panelOpciones.Controls.Add(btn);
             }
         }
+
 
         private void OpcionButton_Click(object sender, EventArgs e)
         {
@@ -64,8 +81,12 @@ namespace proyectoFinalPOE.Vista
                 Type type = Type.GetType("proyectoFinalPOE.Vista." + viewPath);
                 if (type != null)
                 {
-                    // Crear una instancia del UserControl pasando el DatabaseHelper como parámetro
-                    return (UserControl)Activator.CreateInstance(type, databaseHelper);
+                    // Aquí se pasa databaseHelper al constructor del UserControl
+                    if (type == typeof(ClienteControl))
+                    {
+                        return (UserControl)Activator.CreateInstance(type, new object[] { databaseHelper, panelVentana });
+                    }
+                    return (UserControl)Activator.CreateInstance(type, new object[] { databaseHelper });
                 }
                 else
                 {

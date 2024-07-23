@@ -29,6 +29,10 @@
         private void InitializeComponent()
         {
             dgvClientes = new DataGridView();
+            txtBuscarNombre = new TextBox();
+            btnBuscar = new Button();
+            btnCrear = new Button();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvClientes).BeginInit();
             SuspendLayout();
             // 
@@ -38,22 +42,68 @@
             dgvClientes.Location = new Point(14, 120);
             dgvClientes.Name = "dgvClientes";
             dgvClientes.Size = new Size(468, 282);
-            dgvClientes.TabIndex = 0;            
+            dgvClientes.TabIndex = 0;
+            // 
+            // txtBuscarNombre
+            // 
+            txtBuscarNombre.Location = new Point(14, 69);
+            txtBuscarNombre.Name = "txtBuscarNombre";
+            txtBuscarNombre.Size = new Size(190, 23);
+            txtBuscarNombre.TabIndex = 1;
+            // 
+            // btnBuscar
+            // 
+            btnBuscar.Location = new Point(210, 69);
+            btnBuscar.Name = "btnBuscar";
+            btnBuscar.Size = new Size(75, 23);
+            btnBuscar.TabIndex = 2;
+            btnBuscar.Text = "Buscar";
+            btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
+            // 
+            // btnCrear
+            // 
+            btnCrear.Location = new Point(407, 28);
+            btnCrear.Name = "btnCrear";
+            btnCrear.Size = new Size(75, 23);
+            btnCrear.TabIndex = 3;
+            btnCrear.Text = "Nuevo";
+            btnCrear.UseVisualStyleBackColor = true;
+            btnCrear.Click += btnCrear_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Montserrat Black", 15F);
+            label1.Location = new Point(14, 22);
+            label1.Name = "label1";
+            label1.Size = new Size(101, 27);
+            label1.TabIndex = 4;
+            label1.Text = "Clientes";
             // 
             // ClienteControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
+            Controls.Add(label1);
+            Controls.Add(btnCrear);
+            Controls.Add(btnBuscar);
+            Controls.Add(txtBuscarNombre);
             Controls.Add(dgvClientes);
             Name = "ClienteControl";
             Size = new Size(496, 417);
             ((System.ComponentModel.ISupportInitialize)dgvClientes).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private DataGridView dgvClientes;
+        private TextBox txtBuscarNombre;
+        private Button btnBuscar;
+        private Button btnCrear;
+        private Label label1;
     }
 }
