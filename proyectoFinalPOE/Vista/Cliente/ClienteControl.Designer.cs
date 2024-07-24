@@ -43,6 +43,7 @@
             dgvClientes.Name = "dgvClientes";
             dgvClientes.Size = new Size(468, 282);
             dgvClientes.TabIndex = 0;
+            dgvClientes.CellClick += dgvClientes_CellClick;
             // 
             // txtBuscarNombre
             // 
@@ -75,10 +76,10 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Montserrat Black", 15F);
+            label1.Font = new Font("Microsoft Sans Serif", 15F);
             label1.Location = new Point(14, 22);
             label1.Name = "label1";
-            label1.Size = new Size(101, 27);
+            label1.Size = new Size(83, 25);
             label1.TabIndex = 4;
             label1.Text = "Clientes";
             // 
@@ -108,3 +109,5 @@
         private Label label1;
     }
 }
+
+

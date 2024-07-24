@@ -64,14 +64,56 @@ namespace proyectoFinalPOE
             }
         }
 
-        private void btnCancelar_Click(object sender, EventArgs e)
+        private void Principal_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void labelExit_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void Principal_FormClosing(object sender, FormClosingEventArgs e)
+        private void labelClear_MouseEnter(object sender, EventArgs e)
         {
-            Application.Exit();
+            Label label = sender as Label;
+            if (label != null)
+            {
+                label.Cursor = Cursors.Hand;
+            }
+        }
+
+        private void labelClear_MouseLeave(object sender, EventArgs e)
+        {
+            Label label = sender as Label;
+            if (label != null)
+            {
+                label.Cursor = Cursors.Default;
+            }
+        }
+
+        private void labelExit_MouseEnter(object sender, EventArgs e)
+        {
+            Label label = sender as Label;
+            if (label != null)
+            {
+                label.Cursor = Cursors.Hand;
+            }
+        }
+
+        private void labelExit_MouseLeave(object sender, EventArgs e)
+        {
+            Label label = sender as Label;
+            if (label != null)
+            {
+                label.Cursor = Cursors.Default;
+            }
+        }
+
+        private void labelClear_Click(object sender, EventArgs e)
+        {
+            txtUsuario.Text = string.Empty;
+            txtContrasena.Text = string.Empty;
         }
     }
 }

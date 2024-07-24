@@ -77,11 +77,11 @@ namespace proyectoFinalPOE.Repositorio
                 {
                     connection.Open();
                     string query = @"
-                    SELECT R.idRol, R.descripcion
-                    FROM USUARIO U
-                    JOIN rol_usuario RU ON U.idUsuario = RU.idUsuario
-                    JOIN ROL R ON RU.idRol = R.idRol
-                    WHERE U.Usuario = @username AND U.clave = @password";
+            SELECT DISTINCT R.idRol, R.descripcion
+            FROM USUARIO U
+            JOIN rol_usuario RU ON U.idUsuario = RU.idUsuario
+            JOIN ROL R ON RU.idRol = R.idRol
+            WHERE U.Usuario = @username AND U.clave = @password AND R.bd_est = 1";
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@username", username);
                     command.Parameters.AddWithValue("@password", password);
@@ -106,5 +106,7 @@ namespace proyectoFinalPOE.Repositorio
 
             return roles;
         }
+
+
     }
 }

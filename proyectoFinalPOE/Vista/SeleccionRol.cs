@@ -1,14 +1,9 @@
-﻿using proyectoFinalPOE.Modelo;
+﻿using proyectoFinalPOE.Controlador;
+using proyectoFinalPOE.Modelo;
+using proyectoFinalPOE.Negocio;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static proyectoFinalPOE.Controlador.DatabaseHelper;
 
 namespace proyectoFinalPOE.Vista
 {
@@ -26,9 +21,12 @@ namespace proyectoFinalPOE.Vista
             this.password = password;
 
             // Configurar el ComboBox para mostrar la descripción pero almacenar el idRol
-            cmbRoles.DataSource = roles;
+            cmbRoles.DataSource = roles.Distinct().ToList();
             cmbRoles.DisplayMember = "Descripcion";
             cmbRoles.ValueMember = "IdRol";
+
+            // Configurar el evento de FormClosing
+            this.FormClosing += new FormClosingEventHandler(SeleccionRol_FormClosing);
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
@@ -47,6 +45,54 @@ namespace proyectoFinalPOE.Vista
                 MessageBox.Show("Por favor, selecciona un rol.");
             }
         }
+
+        private void SeleccionRol_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void labelExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void labelClear_MouseEnter(object sender, EventArgs e)
+        {
+            Label label = sender as Label;
+            if (label != null)
+            {
+                label.Cursor = Cursors.Hand;
+            }
+        }
+
+        private void labelClear_MouseLeave(object sender, EventArgs e)
+        {
+            Label label = sender as Label;
+            if (label != null)
+            {
+                label.Cursor = Cursors.Default;
+            }
+        }
+
+        private void labelExit_MouseEnter(object sender, EventArgs e)
+        {
+            Label label = sender as Label;
+            if (label != null)
+            {
+                label.Cursor = Cursors.Hand;
+            }
+        }
+
+        private void labelExit_MouseLeave(object sender, EventArgs e)
+        {
+            Label label = sender as Label;
+            if (label != null)
+            {
+                label.Cursor = Cursors.Default;
+            }
+        }
     }
 
+
 }
+
