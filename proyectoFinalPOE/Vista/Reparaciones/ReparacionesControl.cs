@@ -1,13 +1,8 @@
 ﻿using proyectoFinalPOE.Controlador;
 using proyectoFinalPOE.Repositorio;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace proyectoFinalPOE.Vista.Reparaciones
@@ -18,7 +13,6 @@ namespace proyectoFinalPOE.Vista.Reparaciones
         private ReparacionRepository reparacionRepository;
         private Panel panelVentana;
 
-
         public ReparacionesControl(DatabaseHelper databaseHelper, Panel panelVentana)
         {
             InitializeComponent();
@@ -26,7 +20,6 @@ namespace proyectoFinalPOE.Vista.Reparaciones
             this.panelVentana = panelVentana;
             reparacionRepository = new ReparacionRepository(databaseHelper);
             LoadReparaciones();
-
         }
 
         private void LoadReparaciones()
@@ -41,11 +34,14 @@ namespace proyectoFinalPOE.Vista.Reparaciones
             }
 
             PersonalizarDataGridView();
+            dgvReparaciones.CellClick += DgvReparaciones_CellClick;
         }
-
 
         private void PersonalizarDataGridView()
         {
+            // Configurar el DataGridView para que no permita agregar filas nuevas
+            dgvReparaciones.AllowUserToAddRows = false;
+
             // Ocultar las columnas de ID solo si existen
             if (dgvReparaciones.Columns.Contains("idReparacion"))
                 dgvReparaciones.Columns["idReparacion"].Visible = false;
@@ -90,18 +86,22 @@ namespace proyectoFinalPOE.Vista.Reparaciones
                 dgvReparaciones.Columns["Repuestos"].DisplayIndex = 4;
             }
 
+            if (dgvReparaciones.Columns.Contains("Modelo"))
+            {
+                dgvReparaciones.Columns["Modelo"].HeaderText = "Modelo";
+                dgvReparaciones.Columns["Modelo"].DisplayIndex = 5;
+            }
+
             // Ajustar el modo de ajuste de las columnas
-            dgvReparaciones.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvReparaciones.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dgvReparaciones.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvReparaciones.AllowUserToResizeColumns = true;
             dgvReparaciones.AllowUserToResizeRows = true;
             dgvReparaciones.RowHeadersVisible = false;
+
+            // Permitir desplazamiento horizontal si es necesario
+            dgvReparaciones.ScrollBars = ScrollBars.Both;
         }
-
-
-
-
-
 
         private void btnNuevaReparacion_Click(object sender, EventArgs e)
         {
@@ -110,5 +110,26 @@ namespace proyectoFinalPOE.Vista.Reparaciones
             panelVentana.Controls.Add(nuevaReparacionControl);
             nuevaReparacionControl.Dock = DockStyle.Fill;
         }
+
+        private void DgvReparaciones_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == dgvReparaciones.Columns["btnEliminar"].Index)
+            {
+                // Confirmar eliminación
+                DialogResult result = MessageBox.Show("¿Está seguro de que desea eliminar esta reparación?", "Confirmar eliminación", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    // Obtener el ID de la reparación
+                    int idReparacion = Convert.ToInt32(dgvReparaciones.Rows[e.RowIndex].Cells["idReparacion"].Value);
+
+                    // Eliminar la reparación
+                    reparacionRepository.EliminarReparacion(idReparacion);
+
+                    // Recargar las reparaciones
+                    LoadReparaciones();
+                }
+            }
+        }
     }
 }
+

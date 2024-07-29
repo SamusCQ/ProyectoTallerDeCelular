@@ -2,15 +2,10 @@
 {
     partial class ReparacionesControl
     {
-        /// <summary> 
-        /// Variable del diseñador necesaria.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private DataGridView dgvReparaciones;
+        private Button btnNuevaReparacion;
 
-        /// <summary> 
-        /// Limpiar los recursos que se estén usando.
-        /// </summary>
-        /// <param name="disposing">true si los recursos administrados se deben desechar; false en caso contrario.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,15 +15,10 @@
             base.Dispose(disposing);
         }
 
-        #region Código generado por el Diseñador de componentes
-
-        /// <summary> 
-        /// Método necesario para admitir el Diseñador. No se puede modificar
-        /// el contenido de este método con el editor de código.
-        /// </summary>
         private void InitializeComponent()
         {
             dgvReparaciones = new DataGridView();
+            btnEliminar = new DataGridViewButtonColumn();
             btnNuevaReparacion = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvReparaciones).BeginInit();
             SuspendLayout();
@@ -36,10 +26,18 @@
             // dgvReparaciones
             // 
             dgvReparaciones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvReparaciones.Columns.AddRange(new DataGridViewColumn[] { btnEliminar });
             dgvReparaciones.Location = new Point(18, 74);
             dgvReparaciones.Name = "dgvReparaciones";
-            dgvReparaciones.Size = new Size(460, 317);
+            dgvReparaciones.Size = new Size(456, 317);
             dgvReparaciones.TabIndex = 0;
+            // 
+            // btnEliminar
+            // 
+            btnEliminar.HeaderText = "Eliminar";
+            btnEliminar.Name = "btnEliminar";
+            btnEliminar.Text = "Eliminar";
+            btnEliminar.UseColumnTextForButtonValue = true;
             // 
             // btnNuevaReparacion
             // 
@@ -63,9 +61,6 @@
             ResumeLayout(false);
         }
 
-        #endregion
-
-        private DataGridView dgvReparaciones;
-        private Button btnNuevaReparacion;
+        private DataGridViewButtonColumn btnEliminar;
     }
 }
