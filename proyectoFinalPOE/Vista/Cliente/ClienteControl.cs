@@ -34,16 +34,20 @@ namespace proyectoFinalPOE.Vista
         {
             if (!dgvClientes.Columns.Contains("Edit") && !dgvClientes.Columns.Contains("Delete"))
             {
-                DataGridViewButtonColumn editButtonColumn = new DataGridViewButtonColumn();
-                editButtonColumn.Name = "Edit";
-                editButtonColumn.Text = "Editar";
-                editButtonColumn.UseColumnTextForButtonValue = true;
+                DataGridViewButtonColumn editButtonColumn = new DataGridViewButtonColumn
+                {
+                    Name = "Edit",
+                    Text = "Editar",
+                    UseColumnTextForButtonValue = true
+                };
                 dgvClientes.Columns.Add(editButtonColumn);
 
-                DataGridViewButtonColumn deleteButtonColumn = new DataGridViewButtonColumn();
-                deleteButtonColumn.Name = "Delete";
-                deleteButtonColumn.Text = "Eliminar";
-                deleteButtonColumn.UseColumnTextForButtonValue = true;
+                DataGridViewButtonColumn deleteButtonColumn = new DataGridViewButtonColumn
+                {
+                    Name = "Delete",
+                    Text = "Eliminar",
+                    UseColumnTextForButtonValue = true
+                };
                 dgvClientes.Columns.Add(deleteButtonColumn);
 
                 // Ajustar el DisplayIndex de las columnas de botones para que aparezcan al final
@@ -74,15 +78,11 @@ namespace proyectoFinalPOE.Vista
             dgvClientes.Columns["IdCliente"].Visible = false;
             dgvClientes.Columns["Nombre"].Visible = false;
             dgvClientes.Columns["Apellido"].Visible = false;
-            dgvClientes.Columns["BdEst"].Visible = false; // Asegúrate de que no se muestre esta columna
+            dgvClientes.Columns["BdEst"].Visible = false;
 
             dgvClientes.Columns["NombreCompleto"].HeaderText = "Cliente";
-
-            // Mover la columna NombreCompleto al principio
             dgvClientes.Columns["NombreCompleto"].DisplayIndex = 0;
 
-            // Puedes personalizar el ancho de las columnas si lo deseas
-            dgvClientes.Columns["NombreCompleto"].Width = 200;
             dgvClientes.Columns["NuCedula"].HeaderText = "Cédula";
             dgvClientes.Columns["NuCedula"].Width = 150;
             dgvClientes.Columns["NuCelular"].HeaderText = "Celular";
@@ -90,12 +90,10 @@ namespace proyectoFinalPOE.Vista
             dgvClientes.Columns["Correo"].HeaderText = "Correo Electrónico";
             dgvClientes.Columns["Correo"].Width = 250;
 
-            // Ajustar el ancho de todas las columnas automáticamente
             dgvClientes.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-
-            // Eliminar la columna de selección de filas
             dgvClientes.RowHeadersVisible = false;
         }
+
 
         private void txtBuscarNombre_KeyDown_1(object sender, KeyEventArgs e)
         {

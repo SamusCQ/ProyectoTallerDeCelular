@@ -77,13 +77,20 @@ namespace proyectoFinalPOE.Vista
         {
             try
             {
-                Type type = Type.GetType("proyectoFinalPOE.Vista." + viewPath);
+                // Agrega la lógica para construir la ruta completa basándose en la estructura de carpetas y espacios de nombres
+                string baseNamespace = "proyectoFinalPOE.Vista";
+                string fullPath = viewPath.Contains("Repuesto") ? baseNamespace + ".Repuesto." + viewPath : baseNamespace + "." + viewPath;
+
+                MessageBox.Show("Intentando cargar: " + fullPath);
+                Type type = Type.GetType(fullPath);
                 if (type != null)
                 {
+                    MessageBox.Show("Tipo encontrado: " + fullPath);
                     return (UserControl)Activator.CreateInstance(type, new object[] { databaseHelper, panelVentana });
                 }
                 else
                 {
+                    MessageBox.Show("No se encontró la vista: " + fullPath);
                     return null;
                 }
             }
@@ -93,6 +100,9 @@ namespace proyectoFinalPOE.Vista
                 return null;
             }
         }
+
+
+
 
         private void ConfigureUIBasedOnRole()
         {
