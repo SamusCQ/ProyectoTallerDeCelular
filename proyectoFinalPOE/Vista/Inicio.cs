@@ -4,6 +4,9 @@ using proyectoFinalPOE.Repositorio;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace proyectoFinalPOE.Vista
 {
@@ -79,10 +82,28 @@ namespace proyectoFinalPOE.Vista
             {
                 // Agrega la lógica para construir la ruta completa basándose en la estructura de carpetas y espacios de nombres
                 string baseNamespace = "proyectoFinalPOE.Vista";
-                string fullPath = viewPath.Contains("Repuesto") ? baseNamespace + ".Repuesto." + viewPath : baseNamespace + "." + viewPath;
+                string fullPath = string.Empty;
+
+                if (viewPath.Contains("Repuesto"))
+                {
+                    fullPath = baseNamespace + ".Repuesto." + viewPath;
+                }
+                else if (viewPath.Contains("Reparacion"))
+                {
+                    fullPath = baseNamespace + ".Reparaciones." + viewPath;
+                }
+                else
+                {
+                    fullPath = baseNamespace + "." + viewPath;
+                }
 
                 MessageBox.Show("Intentando cargar: " + fullPath);
-                Type type = Type.GetType(fullPath);
+
+                // Busca el tipo a través de todas las clases cargadas en el dominio de la aplicación
+                Type type = AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(assembly => assembly.GetTypes())
+                    .FirstOrDefault(t => t.FullName == fullPath);
+
                 if (type != null)
                 {
                     MessageBox.Show("Tipo encontrado: " + fullPath);
@@ -100,6 +121,7 @@ namespace proyectoFinalPOE.Vista
                 return null;
             }
         }
+
 
 
 

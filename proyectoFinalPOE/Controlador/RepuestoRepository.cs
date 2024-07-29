@@ -192,6 +192,59 @@ namespace proyectoFinalPOE.Repositorio
             }
             return repuestos;
         }
+
+        public List<Repuesto> GetRepuestosPorMarcaYModelo(int idMarca, int idModelo)
+        {
+            List<Repuesto> repuestos = new List<Repuesto>();
+
+            using (SqlConnection connection = databaseHelper.GetConnection())
+            {
+                string query = @"SELECT * FROM REPUESTOS WHERE idMarca = @idMarca AND idModelo = @idModelo AND bd_est = 1";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@idMarca", idMarca);
+                command.Parameters.AddWithValue("@idModelo", idModelo);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Repuesto repuesto = new Repuesto
+                        {
+                            IdRepuesto = reader.GetInt32(0),
+                            IdMarca = reader.GetInt32(1),
+                            IdModelo = reader.GetInt32(2),
+                            Descripcion = reader.GetString(3),
+                            IdTipo = reader.GetInt32(4),
+                            Valor = reader.GetDecimal(5),
+                            BdEst = reader.GetInt32(6),
+                            Cantidad = reader.GetInt32(7),
+                            FechaIngreso = reader.GetDateTime(8)
+                        };
+                        repuestos.Add(repuesto);
+                    }
+                }
+            }
+
+            return repuestos;
+        }
+
+
+        public void ActualizarCantidadRepuesto(int idRepuesto, int cantidadRestar)
+        {
+            using (SqlConnection connection = databaseHelper.GetConnection())
+            {
+                string query = "UPDATE REPUESTOS SET cantidad = cantidad - @cantidadRestar WHERE idRepuesto = @idRepuesto";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@idRepuesto", idRepuesto);
+                command.Parameters.AddWithValue("@cantidadRestar", cantidadRestar);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+
+
     }
 }
 

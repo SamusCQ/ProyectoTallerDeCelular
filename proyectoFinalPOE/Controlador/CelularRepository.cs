@@ -187,6 +187,90 @@ namespace proyectoFinalPOE.Repositorio
             }
         }
 
+        public List<Celular> GetCelularesPorCliente(int idCliente)
+        {
+            List<Celular> celulares = new List<Celular>();
+
+            using (SqlConnection connection = databaseHelper.GetConnection())
+            {
+                string query = @"
+                    SELECT c.IdCelular, c.IdCliente, c.IdModelo, c.IdColor, c.bd_est,
+                           m.descripcion AS NombreModelo, col.descripcion AS Color
+                    FROM CELULAR c
+                    JOIN MODELO_CELULAR m ON c.IdModelo = m.IdModelo
+                    JOIN COLORES col ON c.IdColor = col.IdColor
+                    WHERE c.IdCliente = @idCliente AND c.bd_est = 1";
+
+
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@idCliente", idCliente);
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Celular celular = new Celular
+                    {
+                        IdCelular = reader.GetInt32(0),
+                        IdCliente = reader.GetInt32(1),
+                        IdModelo = reader.GetInt32(2),
+                        IdColor = reader.GetInt32(3),
+                        BdEst = reader.GetInt32(4),
+                        NombreModelo = reader.GetString(5),
+                        Color = reader.GetString(6)
+                    };
+                    celulares.Add(celular);
+                }
+            }
+
+            return celulares;
+        }
+
+
+        public Celular GetCelularPorId(int idCelular)
+        {
+            Celular celular = null;
+
+            using (SqlConnection connection = databaseHelper.GetConnection())
+            {
+                string query = @"SELECT c.IdCelular, c.IdCliente, c.IdModelo, c.IdColor, c.bd_est,
+                                m.idMarca, m.descripcion AS NombreModelo, col.descripcion AS Color
+                         FROM CELULAR c
+                         JOIN MODELO_CELULAR m ON c.IdModelo = m.IdModelo
+                         JOIN COLORES col ON c.IdColor = col.IdColor
+                         WHERE c.IdCelular = @idCelular AND c.bd_est = 1";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@idCelular", idCelular);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        celular = new Celular
+                        {
+                            IdCelular = reader.GetInt32(0),
+                            IdCliente = reader.GetInt32(1),
+                            IdModelo = reader.GetInt32(2),
+                            IdColor = reader.GetInt32(3),
+                            BdEst = reader.GetInt32(4),
+                            IdMarca = reader.GetInt32(5),
+                            NombreModelo = reader.GetString(6),
+                            Color = reader.GetString(7)
+                        };
+                    }
+                }
+            }
+
+            return celular;
+        }
+
+
+
+
+
+
+
 
     }
 }
