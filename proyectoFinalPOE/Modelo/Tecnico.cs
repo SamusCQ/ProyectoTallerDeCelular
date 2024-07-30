@@ -1,10 +1,12 @@
-﻿
+﻿using System;
+
 namespace proyectoFinalPOE.Modelo
 {
-    public class Cliente : Persona
+    public class Tecnico : Persona
     {
-        public int IdCliente { get; set; }
+        public int IdTecnico { get; set; }
+
         public string NombreCompleto { get; set; }
+
     }
 }
-

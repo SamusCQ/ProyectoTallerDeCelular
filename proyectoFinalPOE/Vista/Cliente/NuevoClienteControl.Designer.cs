@@ -170,6 +170,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(Cancelar);
             Controls.Add(groupBox1);
+            Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Name = "NuevoClienteControl";
             Size = new Size(496, 417);
             groupBox1.ResumeLayout(false);

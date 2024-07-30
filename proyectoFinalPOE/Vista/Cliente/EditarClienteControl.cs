@@ -8,12 +8,12 @@ namespace proyectoFinalPOE.Vista
 {
     public partial class EditarClienteControl : UserControl
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
         private Panel panelVentana;
         private int idCliente;
         private ClienteRepository clienteRepository;
 
-        public EditarClienteControl(DatabaseHelper databaseHelper, Panel panelVentana, int idCliente)
+        public EditarClienteControl(DatabaseConector databaseHelper, Panel panelVentana, int idCliente)
         {
             InitializeComponent();
             this.databaseHelper = databaseHelper;

@@ -38,14 +38,17 @@
             // 
             // dgvCelulares
             // 
+            dgvCelulares.BackgroundColor = Color.White;
             dgvCelulares.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvCelulares.Location = new Point(14, 103);
+            dgvCelulares.GridColor = Color.Black;
+            dgvCelulares.Location = new Point(3, 86);
             dgvCelulares.Name = "dgvCelulares";
-            dgvCelulares.Size = new Size(464, 299);
+            dgvCelulares.Size = new Size(490, 328);
             dgvCelulares.TabIndex = 0;
             // 
             // txtBuscarCelular
             // 
+            txtBuscarCelular.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtBuscarCelular.Location = new Point(14, 57);
             txtBuscarCelular.Name = "txtBuscarCelular";
             txtBuscarCelular.Size = new Size(234, 23);
@@ -54,6 +57,7 @@
             // 
             // btnBuscar
             // 
+            btnBuscar.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnBuscar.Location = new Point(254, 56);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(75, 23);
@@ -64,7 +68,8 @@
             // 
             // btnCrear
             // 
-            btnCrear.Location = new Point(403, 18);
+            btnCrear.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnCrear.Location = new Point(347, 57);
             btnCrear.Name = "btnCrear";
             btnCrear.Size = new Size(75, 23);
             btnCrear.TabIndex = 3;
@@ -75,9 +80,11 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(14, 22);
+            label1.Font = new Font("Bauhaus 93", 11.25F, FontStyle.Bold);
+            label1.ForeColor = Color.FromArgb(0, 117, 214);
+            label1.Location = new Point(14, 25);
             label1.Name = "label1";
-            label1.Size = new Size(55, 15);
+            label1.Size = new Size(78, 16);
             label1.TabIndex = 4;
             label1.Text = "Celulares";
             // 
@@ -85,12 +92,13 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ActiveCaption;
+            BackColor = Color.White;
             Controls.Add(label1);
             Controls.Add(btnCrear);
             Controls.Add(btnBuscar);
             Controls.Add(txtBuscarCelular);
             Controls.Add(dgvCelulares);
+            Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Name = "CelularesControl";
             Size = new Size(496, 417);
             ((System.ComponentModel.ISupportInitialize)dgvCelulares).EndInit();

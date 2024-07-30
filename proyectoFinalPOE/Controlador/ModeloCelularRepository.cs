@@ -8,9 +8,9 @@ namespace proyectoFinalPOE.Repositorio
 {
     public class ModeloCelularRepository
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
 
-        public ModeloCelularRepository(DatabaseHelper databaseHelper)
+        public ModeloCelularRepository(DatabaseConector databaseHelper)
         {
             this.databaseHelper = databaseHelper;
         }

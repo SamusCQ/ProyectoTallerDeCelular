@@ -7,9 +7,9 @@ namespace proyectoFinalPOE.Repositorio
 {
     public class RepuestoRepository
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
 
-        public RepuestoRepository(DatabaseHelper databaseHelper)
+        public RepuestoRepository(DatabaseConector databaseHelper)
         {
             this.databaseHelper = databaseHelper;
         }
@@ -242,6 +242,20 @@ namespace proyectoFinalPOE.Repositorio
                 command.ExecuteNonQuery();
             }
         }
+
+        public void InsertarCantidad(int idRepuesto, int cantidad)
+        {
+            using (SqlConnection connection = databaseHelper.GetConnection())
+            {
+                string query = "UPDATE REPUESTOS SET cantidad = cantidad + @cantidad WHERE idRepuesto = @idRepuesto";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@cantidad", cantidad);
+                command.Parameters.AddWithValue("@idRepuesto", idRepuesto);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
 
 
 

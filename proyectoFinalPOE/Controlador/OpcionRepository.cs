@@ -8,9 +8,9 @@ namespace proyectoFinalPOE.Repositorio
 {
     public class OpcionRepository
     {
-        private readonly DatabaseHelper databaseHelper;
+        private readonly DatabaseConector databaseHelper;
 
-        public OpcionRepository(DatabaseHelper databaseHelper)
+        public OpcionRepository(DatabaseConector databaseHelper)
         {
             this.databaseHelper = databaseHelper;
         }

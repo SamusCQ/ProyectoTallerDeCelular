@@ -11,7 +11,7 @@ namespace proyectoFinalPOE.Vista
 {
     public partial class NuevaReparacionControl : UserControl
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
         private ReparacionRepository reparacionRepository;
         private RepuestoRepository repuestoRepository;
         private ClienteRepository clienteRepository;
@@ -19,7 +19,7 @@ namespace proyectoFinalPOE.Vista
         private EstadoRepository estadoRepository;
         private Panel panelVentana;
 
-        public NuevaReparacionControl(DatabaseHelper databaseHelper, Panel panelVentana)
+        public NuevaReparacionControl(DatabaseConector databaseHelper, Panel panelVentana)
         {
             InitializeComponent();
             this.databaseHelper = databaseHelper;

@@ -10,7 +10,7 @@ namespace proyectoFinalPOE.Negocio
     {
         private readonly UsuarioRepository usuarioRepository;
 
-        public UsuarioService(DatabaseHelper databaseHelper)
+        public UsuarioService(DatabaseConector databaseHelper)
         {
             usuarioRepository = new UsuarioRepository(databaseHelper);
         }

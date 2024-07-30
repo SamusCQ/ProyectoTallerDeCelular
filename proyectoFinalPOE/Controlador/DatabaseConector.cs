@@ -2,11 +2,11 @@
 
 namespace proyectoFinalPOE.Controlador
 {
-    public class DatabaseHelper
+    public class DatabaseConector
     {
         private readonly string connectionString;
 
-        public DatabaseHelper()
+        public DatabaseConector()
         {
             connectionString = "Data Source=DESKTOP-GQ6ROQ2\\SQLEXPRESS;Initial Catalog=DbCelular;Integrated Security=True";
         }

@@ -1,5 +1,5 @@
 ﻿using proyectoFinalPOE.Controlador;
-using proyectoFinalPOE.Modelo; // Asegúrate de tener esta directiva
+using proyectoFinalPOE.Modelo;
 using proyectoFinalPOE.Repositorio;
 using System;
 using System.Collections.Generic;
@@ -10,16 +10,17 @@ namespace proyectoFinalPOE.Vista
     public partial class CelularesControl : UserControl
     {
         private CelularRepository celularRepository;
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
         private Panel panelVentana;
 
-        public CelularesControl(DatabaseHelper databaseHelper, Panel panelVentana)
+        public CelularesControl(DatabaseConector databaseHelper, Panel panelVentana)
         {
             InitializeComponent();
             this.databaseHelper = databaseHelper;
             this.panelVentana = panelVentana;
             celularRepository = new CelularRepository(databaseHelper);
             LoadCelulares();
+            ApplyStyles();
         }
 
         private void LoadCelulares()
@@ -68,7 +69,6 @@ namespace proyectoFinalPOE.Vista
 
         private void PersonalizarDataGridView()
         {
-            // Asegúrate de que las columnas existen antes de intentar acceder a ellas.
             if (dgvCelulares.Columns["IdCelular"] != null)
             {
                 dgvCelulares.Columns["IdCelular"].Visible = false;
@@ -133,9 +133,11 @@ namespace proyectoFinalPOE.Vista
             dgvCelulares.CellClick += dgvCelulares_CellClick;
         }
 
-
-
-
+        private void ApplyStyles()
+        {
+            Estilos.ApplyButtonStyleSmallFont(btnBuscar);
+            Estilos.ApplyButtonStyleSmallFont(btnCrear);
+        }
 
         private void txtBuscarCelular_KeyDown(object sender, KeyEventArgs e)
         {

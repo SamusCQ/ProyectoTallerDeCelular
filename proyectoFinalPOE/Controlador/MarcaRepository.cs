@@ -7,9 +7,9 @@ namespace proyectoFinalPOE.Repositorio
 {
     public class MarcaRepository
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
 
-        public MarcaRepository(DatabaseHelper databaseHelper)
+        public MarcaRepository(DatabaseConector databaseHelper)
         {
             this.databaseHelper = databaseHelper;
         }

@@ -13,15 +13,17 @@ namespace proyectoFinalPOE.Vista
 {
     public partial class FacturaControl : UserControl
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
         private FacturaRepository facturaRepository;
+        private ReparacionRepository reparacionRepository;
         private Panel panelVentana;
 
-        public FacturaControl(DatabaseHelper databaseHelper, Panel panelVentana)
+        public FacturaControl(DatabaseConector databaseHelper, Panel panelVentana)
         {
             InitializeComponent();
             this.databaseHelper = databaseHelper;
             this.panelVentana = panelVentana;
+            this.reparacionRepository = new ReparacionRepository(databaseHelper);
             facturaRepository = new FacturaRepository(databaseHelper);
             LoadFacturas();
         }
@@ -119,25 +121,6 @@ namespace proyectoFinalPOE.Vista
             nuevaFacturaControl.Dock = DockStyle.Fill;
         }
 
-        private void btnBuscarFactura_Click(object sender, EventArgs e)
-        {
-            string clienteBuscado = txtBuscarFactura.Text.Trim();
-            if (!string.IsNullOrEmpty(clienteBuscado))
-            {
-                DataTable dtFacturas = facturaRepository.GetFacturas();
-                var facturasFiltradas = dtFacturas.AsEnumerable()
-                    .Where(row => row.Field<string>("Cliente").Contains(clienteBuscado, StringComparison.OrdinalIgnoreCase))
-                    .CopyToDataTable();
-
-                dgvFacturas.DataSource = facturasFiltradas;
-                PersonalizarDataGridView();
-            }
-            else
-            {
-                LoadFacturas();
-            }
-        }
-
         private void dgvFacturas_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex == dgvFacturas.Columns["btnEliminar"].Index)
@@ -207,7 +190,7 @@ namespace proyectoFinalPOE.Vista
                 document.Add(logo);
 
                 // Agregar información del encabezado
-                iTextSharp.text.Paragraph encabezado = new iTextSharp.text.Paragraph("INSTITUTO SUPERIOR TECNOLOGICO LICEO CRISTIANO\n\n", new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 12, iTextSharp.text.Font.BOLD));
+                iTextSharp.text.Paragraph encabezado = new iTextSharp.text.Paragraph("CeluTecno\n\n", new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 12, iTextSharp.text.Font.BOLD));
                 encabezado.Alignment = Element.ALIGN_CENTER;
                 document.Add(encabezado);
 
@@ -218,11 +201,11 @@ namespace proyectoFinalPOE.Vista
 
                 // Agregar celdas a la tabla
                 table.AddCell("R.U.C:");
-                table.AddCell("0992880783001");
+                table.AddCell("0955514971001");
                 table.AddCell("Número de autorización:");
-                table.AddCell("001-002-000015616");
+                table.AddCell($"001-002-00000{idFactura}");
                 table.AddCell("Fecha y hora de autorización:");
-                table.AddCell("19/07/2024 14:56:18");
+                table.AddCell(row["fecha"].ToString());
                 table.AddCell("Ambiente:");
                 table.AddCell("Producción Emisión: Normal");
 
@@ -237,11 +220,11 @@ namespace proyectoFinalPOE.Vista
                 infoAdicionalTable.WidthPercentage = 100;
                 infoAdicionalTable.SetWidths(new float[] { 1, 2 });
                 infoAdicionalTable.AddCell("Dirección:");
-                infoAdicionalTable.AddCell("CALLE PUBLICA Y AV JUAN TANCA MARENGO KM 4");
+                infoAdicionalTable.AddCell("Mapasingue Oeste");
                 infoAdicionalTable.AddCell("Teléfono:");
-                infoAdicionalTable.AddCell("04-2591910");
+                infoAdicionalTable.AddCell("0982838830");
                 infoAdicionalTable.AddCell("Correo:");
-                infoAdicionalTable.AddCell("facturacion@tecnologicocristiano.edu.ec");
+                infoAdicionalTable.AddCell("samuelcedenoq@hotmail.com");
 
                 document.Add(infoAdicionalTable);
 
@@ -257,25 +240,44 @@ namespace proyectoFinalPOE.Vista
                 detalleTable.AddCell("Total");
 
                 // Agregar detalles de la factura
-                detalleTable.AddCell("1");
-                detalleTable.AddCell("Factura Certificado Culminacion de Malla");
-                detalleTable.AddCell("10.00");
-                detalleTable.AddCell("10.00");
+                decimal subtotal = 0;
+                List<Modelo.Repuesto> repuestos = reparacionRepository.GetRepuestosPorReparacion(row.Field<int>("idReparacion")); // Fetch using the repair ID
+                if (repuestos != null && repuestos.Count > 0)
+                {
+                    foreach (var repuesto in repuestos)
+                    {
+                        detalleTable.AddCell("1"); // Suponiendo que cada repuesto es de cantidad 1
+                        detalleTable.AddCell(repuesto.Descripcion);
+                        detalleTable.AddCell(repuesto.Valor.ToString("0.00"));
+                        detalleTable.AddCell(repuesto.Valor.ToString("0.00"));
+                        subtotal += repuesto.Valor;
+                    }
+                }
+                else
+                {
+                    detalleTable.AddCell("-");
+                    detalleTable.AddCell("No hay repuestos asociados a esta reparación.");
+                    detalleTable.AddCell("-");
+                    detalleTable.AddCell("-");
+                }
 
                 document.Add(detalleTable);
 
                 // Agregar totales
+                decimal iva = subtotal * 0.15m;
+                decimal total = subtotal + iva;
+
                 PdfPTable totalesTable = new PdfPTable(2);
                 totalesTable.WidthPercentage = 50;
                 totalesTable.HorizontalAlignment = Element.ALIGN_RIGHT;
                 totalesTable.SetWidths(new float[] { 1, 1 });
 
                 totalesTable.AddCell("Subtotal:");
-                totalesTable.AddCell("10.00");
-                totalesTable.AddCell("IVA 12%:");
-                totalesTable.AddCell("1.20");
+                totalesTable.AddCell(subtotal.ToString("0.00"));
+                totalesTable.AddCell("IVA 15%:");
+                totalesTable.AddCell(iva.ToString("0.00"));
                 totalesTable.AddCell("Total:");
-                totalesTable.AddCell("11.20");
+                totalesTable.AddCell(total.ToString("0.00"));
 
                 document.Add(totalesTable);
 
@@ -284,8 +286,27 @@ namespace proyectoFinalPOE.Vista
                 MessageBox.Show($"Factura guardada como {filePath}");
             }
         }
+
+        private void btnBuscarFactura_Click_1(object sender, EventArgs e)
+        {
+            string clienteBuscado = txtBuscarFactura.Text.Trim();
+            if (!string.IsNullOrEmpty(clienteBuscado))
+            {
+                DataTable dtFacturas = facturaRepository.GetFacturas();
+                var facturasFiltradas = dtFacturas.AsEnumerable()
+                    .Where(row => row.Field<string>("Cliente").Contains(clienteBuscado, StringComparison.OrdinalIgnoreCase))
+                    .CopyToDataTable();
+
+                dgvFacturas.DataSource = facturasFiltradas;
+                PersonalizarDataGridView();
+            }
+            else
+            {
+                LoadFacturas();
+            }
+        }
     }
-    }
+}
 
 
 

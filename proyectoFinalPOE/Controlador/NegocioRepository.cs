@@ -8,9 +8,9 @@ namespace proyectoFinalPOE.Repositorio
 {
     public class NegocioRepository
     {
-        private readonly DatabaseHelper _databaseHelper;
+        private readonly DatabaseConector _databaseHelper;
 
-        public NegocioRepository(DatabaseHelper databaseHelper)
+        public NegocioRepository(DatabaseConector databaseHelper)
         {
             _databaseHelper = databaseHelper;
         }

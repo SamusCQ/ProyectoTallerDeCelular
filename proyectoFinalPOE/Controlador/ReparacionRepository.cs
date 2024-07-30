@@ -1,5 +1,7 @@
 ﻿using proyectoFinalPOE.Controlador;
 using proyectoFinalPOE.Modelo;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -7,9 +9,9 @@ namespace proyectoFinalPOE.Repositorio
 {
     public class ReparacionRepository
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
 
-        public ReparacionRepository(DatabaseHelper databaseHelper)
+        public ReparacionRepository(DatabaseConector databaseHelper)
         {
             this.databaseHelper = databaseHelper;
         }
@@ -87,8 +89,6 @@ namespace proyectoFinalPOE.Repositorio
             return dtReparaciones;
         }
 
-
-
         public void EliminarReparacion(int idReparacion)
         {
             using (SqlConnection connection = databaseHelper.GetConnection())
@@ -126,6 +126,7 @@ namespace proyectoFinalPOE.Repositorio
             }
         }
 
+        // Método que devuelve una lista de reparaciones (no cambies)
         public List<Reparacion> GetReparacionesPorCliente(int idCliente)
         {
             List<Reparacion> reparaciones = new List<Reparacion>();
@@ -133,9 +134,9 @@ namespace proyectoFinalPOE.Repositorio
             using (SqlConnection connection = databaseHelper.GetConnection())
             {
                 string query = @"
-            SELECT r.idReparacion, r.descripcion
-            FROM REPARACIONes r
-            WHERE r.idCliente = @idCliente AND r.bd_est = 1";
+                SELECT r.idReparacion, r.descripcion
+                FROM REPARACIONES r
+                WHERE r.idCliente = @idCliente AND r.bd_est = 1 AND r.idEstado = 3"; // Solo reparaciones con idEstado = 3 (Listo)
 
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@idCliente", idCliente);
@@ -156,45 +157,114 @@ namespace proyectoFinalPOE.Repositorio
             return reparaciones;
         }
 
-
-        public List<Repuesto> GetRepuestosPorReparacion(int idReparacion)
+        public DataTable GetReparacionesPorClienteDataTable(int idCliente)
         {
-            List<Repuesto> repuestos = new List<Repuesto>();
-
+            DataTable dtReparaciones = new DataTable();
             using (SqlConnection connection = databaseHelper.GetConnection())
             {
                 string query = @"
-            SELECT r.idRepuesto, r.descripcion, r.valor
-            FROM REPARACION_REPUESTO rr
-            JOIN REPUESTOs r ON rr.idRepuesto = r.idRepuesto
-            WHERE rr.idReparacion = @idReparacion";
+            SELECT 
+                r.idReparacion, 
+                r.descripcion AS Reparacion, 
+                c.nombre AS Cliente, 
+                e.descripcion AS Estado, 
+                string_agg(re.descripcion, ', ') AS Repuestos,
+                m.descripcion AS Modelo
+            FROM 
+                REPARACIONES r
+            JOIN 
+                CLIENTE c ON r.idCliente = c.idCliente
+            JOIN 
+                ESTADO e ON r.idEstado = e.idEstado
+            LEFT JOIN 
+                REPARACION_REPUESTO rr ON r.idReparacion = rr.idReparacion
+            LEFT JOIN 
+                REPUESTOS re ON rr.idRepuesto = re.idRepuesto
+            JOIN
+                CELULAR cel ON r.idCelular = cel.idCelular
+            JOIN
+                MODELO_CELULAR m ON cel.idModelo = m.idModelo
+            WHERE 
+                r.idCliente = @idCliente AND r.bd_est = 1
+            GROUP BY 
+                r.idReparacion, r.descripcion, c.nombre, e.descripcion, m.descripcion";
+
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@idCliente", idCliente);
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+                connection.Open();
+                adapter.Fill(dtReparaciones);
+            }
+            return dtReparaciones;
+        }
+
+
+        public List<Modelo.Repuesto> GetRepuestosPorReparacion(int idReparacion)
+        {
+            List<Modelo.Repuesto> repuestos = new List<Modelo.Repuesto>();
+            using (SqlConnection connection = databaseHelper.GetConnection())
+            {
+                string query = @"
+            SELECT r.*
+            FROM REPUESTOS r
+            JOIN REPARACION_REPUESTO rr ON r.idRepuesto = rr.idRepuesto
+            WHERE rr.idReparacion = @idReparacion AND r.bd_est = 1";
 
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@idReparacion", idReparacion);
-                connection.Open();
 
+                connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        Repuesto repuesto = new Repuesto
+                        Modelo.Repuesto repuesto = new Modelo.Repuesto
                         {
-                            IdRepuesto = reader.GetInt32(0),
-                            Descripcion = reader.GetString(1),
-                            Valor = reader.GetDecimal(2)
+                            IdRepuesto = reader.GetInt32(reader.GetOrdinal("idRepuesto")),
+                            IdMarca = reader.GetInt32(reader.GetOrdinal("idMarca")),
+                            IdModelo = reader.GetInt32(reader.GetOrdinal("idModelo")),
+                            Descripcion = reader.GetString(reader.GetOrdinal("descripcion")),
+                            IdTipo = reader.GetInt32(reader.GetOrdinal("idTipo")),
+                            Valor = reader.GetDecimal(reader.GetOrdinal("valor")),
+                            BdEst = reader.GetInt32(reader.GetOrdinal("bd_est")),
+                            Cantidad = reader.GetInt32(reader.GetOrdinal("cantidad")),
+                            FechaIngreso = reader.GetDateTime(reader.GetOrdinal("fechaIngreso"))
                         };
                         repuestos.Add(repuesto);
                     }
                 }
             }
-
             return repuestos;
         }
 
+        public DataTable GetEstados()
+        {
+            DataTable dtEstados = new DataTable();
+            using (SqlConnection connection = databaseHelper.GetConnection())
+            {
+                string query = "SELECT idEstado, descripcion FROM ESTADO WHERE bd_est = 1";
+                SqlCommand command = new SqlCommand(query, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
 
+                connection.Open();
+                adapter.Fill(dtEstados);
+            }
+            return dtEstados;
+        }
 
-
-
+        public void ActualizarEstadoReparacion(int idReparacion, int idEstado)
+        {
+            using (SqlConnection connection = databaseHelper.GetConnection())
+            {
+                string query = "UPDATE REPARACIONES SET idEstado = @idEstado WHERE idReparacion = @idReparacion";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@idReparacion", idReparacion);
+                command.Parameters.AddWithValue("@idEstado", idEstado);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
 
 
     }

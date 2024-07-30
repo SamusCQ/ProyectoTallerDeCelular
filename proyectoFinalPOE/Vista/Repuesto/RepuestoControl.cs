@@ -6,11 +6,11 @@ namespace proyectoFinalPOE.Vista.Repuesto
 {
     public partial class RepuestoControl : UserControl
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
         private RepuestoRepository repuestoRepository;
         private Panel panelVentana;
 
-        public RepuestoControl(DatabaseHelper databaseHelper, Panel panelVentana)
+        public RepuestoControl(DatabaseConector databaseHelper, Panel panelVentana)
         {
             InitializeComponent();
             this.databaseHelper = databaseHelper;
@@ -44,11 +44,20 @@ namespace proyectoFinalPOE.Vista.Repuesto
                     repuestoRepository.EliminarRepuesto(idRepuesto);
                     LoadRepuestos();
                 }
+                else if (e.ColumnIndex == dgvRepuestos.Columns["IngresarCantidad"].Index)
+                {
+                    int idRepuesto = Convert.ToInt32(dgvRepuestos.Rows[e.RowIndex].Cells["IdRepuesto"].Value);
+                    InsertarCantidadControl insertarCantidadControl = new InsertarCantidadControl(idRepuesto, databaseHelper, panelVentana);
+                    panelVentana.Controls.Clear();
+                    panelVentana.Controls.Add(insertarCantidadControl);
+                    insertarCantidadControl.Dock = DockStyle.Fill;
+                }
             }
         }
 
         private void PersonalizarDataGridView()
         {
+            // Configura el DataGridView para que no muestre ciertos campos internos
             if (dgvRepuestos.Columns["IdRepuesto"] != null)
             {
                 dgvRepuestos.Columns["IdRepuesto"].Visible = false;
@@ -105,6 +114,18 @@ namespace proyectoFinalPOE.Vista.Repuesto
                 dgvRepuestos.Columns.Add(eliminarButton);
             }
 
+            if (!dgvRepuestos.Columns.Contains("IngresarCantidad"))
+            {
+                DataGridViewButtonColumn ingresarCantidadButton = new DataGridViewButtonColumn
+                {
+                    Name = "IngresarCantidad",
+                    HeaderText = "Ingresar Cantidad",
+                    Text = "Ingresar Cantidad",
+                    UseColumnTextForButtonValue = true
+                };
+                dgvRepuestos.Columns.Add(ingresarCantidadButton);
+            }
+
             // Ajustar el tamaño de las columnas para adaptarse al contenido
             foreach (DataGridViewColumn column in dgvRepuestos.Columns)
             {
@@ -119,16 +140,6 @@ namespace proyectoFinalPOE.Vista.Repuesto
             dgvRepuestos.CellClick += dgvRepuestos_CellClick;
         }
 
-
-
-        private void txtBuscarRepuesto_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                btnBuscar.PerformClick();
-            }
-        }
-
         private void btnCrear_Click_1(object sender, EventArgs e)
         {
             NuevoRepuestoControl nuevoRepuestoControl = new NuevoRepuestoControl(databaseHelper, panelVentana);
@@ -136,14 +147,5 @@ namespace proyectoFinalPOE.Vista.Repuesto
             panelVentana.Controls.Add(nuevoRepuestoControl);
             nuevoRepuestoControl.Dock = DockStyle.Fill;
         }
-
-        private void btnBuscar_Click_1(object sender, EventArgs e)
-        {
-            string descripcion = txtBuscarRepuesto.Text;
-            List<ModeloRepuesto> repuestos = repuestoRepository.BuscarRepuestosPorDescripcion(descripcion);
-            dgvRepuestos.DataSource = repuestos;
-            PersonalizarDataGridView();
-        }
     }
 }
-

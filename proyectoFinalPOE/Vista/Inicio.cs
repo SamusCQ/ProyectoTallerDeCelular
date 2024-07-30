@@ -1,29 +1,39 @@
 ﻿using proyectoFinalPOE.Controlador;
 using proyectoFinalPOE.Modelo;
 using proyectoFinalPOE.Repositorio;
+using proyectoFinalPOE.Controlador;
+using proyectoFinalPOE.Modelo;
+using proyectoFinalPOE.Repositorio;
+using DrawingColor = System.Drawing.Color;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace proyectoFinalPOE.Vista
 {
     public partial class Inicio : Form
     {
         private int userRole;
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
         private OpcionRepository opcionRepository;
+        private string userName;
 
         public Inicio(int role)
         {
             InitializeComponent();
             this.userRole = role;
-            this.databaseHelper = new DatabaseHelper();
+            this.userName = userName;
+            this.databaseHelper = new DatabaseConector();
             this.opcionRepository = new OpcionRepository(databaseHelper);
             this.FormClosing += new FormClosingEventHandler(Inicio_FormClosing);
             LoadOpciones();
+            this.MaximizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.SizeGripStyle = SizeGripStyle.Hide;
         }
 
         private void LoadOpciones()
@@ -52,9 +62,19 @@ namespace proyectoFinalPOE.Vista
                 btn.Size = new Size(panelOpciones.Width - 20, buttonHeight);
                 btn.Location = new Point(10, startY + (buttonHeight + spacing) * i);
 
+                // Aplicar estilo similar al botón de Iniciar Sesión
+                btn.BackColor = DrawingColor.FromArgb(0, 117, 214);
+                btn.FlatAppearance.BorderSize = 0;
+                btn.FlatStyle = FlatStyle.Flat;
+                btn.Font = new Font("Bahnschrift", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                btn.ForeColor = DrawingColor.White;
+
                 panelOpciones.Controls.Add(btn);
             }
         }
+
+
+
 
 
         private void OpcionButton_Click(object sender, EventArgs e)
@@ -76,7 +96,7 @@ namespace proyectoFinalPOE.Vista
             }
         }
 
-        private UserControl CreateViewInstance(string viewPath)
+        private UserControl CreateViewInstance(string viewPath, int? idCliente = null)
         {
             try
             {
@@ -92,12 +112,14 @@ namespace proyectoFinalPOE.Vista
                 {
                     fullPath = baseNamespace + ".Reparaciones." + viewPath;
                 }
+                else if (viewPath.Contains("Reparacion"))
+                {
+                    fullPath = baseNamespace + ".ConsultaReparaciones." + viewPath;
+                }
                 else
                 {
                     fullPath = baseNamespace + "." + viewPath;
                 }
-
-                MessageBox.Show("Intentando cargar: " + fullPath);
 
                 // Busca el tipo a través de todas las clases cargadas en el dominio de la aplicación
                 Type type = AppDomain.CurrentDomain.GetAssemblies()
@@ -106,8 +128,33 @@ namespace proyectoFinalPOE.Vista
 
                 if (type != null)
                 {
-                    MessageBox.Show("Tipo encontrado: " + fullPath);
-                    return (UserControl)Activator.CreateInstance(type, new object[] { databaseHelper, panelVentana });
+                    ConstructorInfo constructor;
+                    if (idCliente.HasValue)
+                    {
+                        // Buscar constructor con parámetros (DatabaseConector, Panel, int)
+                        constructor = type.GetConstructor(new Type[] { typeof(DatabaseConector), typeof(Panel), typeof(int) });
+                        if (constructor != null)
+                        {
+                            return (UserControl)constructor.Invoke(new object[] { databaseHelper, panelVentana, idCliente.Value });
+                        }
+                    }
+
+                    // Buscar constructor con parámetros (DatabaseConector, Panel)
+                    constructor = type.GetConstructor(new Type[] { typeof(DatabaseConector), typeof(Panel) });
+                    if (constructor != null)
+                    {
+                        return (UserControl)constructor.Invoke(new object[] { databaseHelper, panelVentana });
+                    }
+
+                    // Buscar constructor sin parámetros
+                    constructor = type.GetConstructor(Type.EmptyTypes);
+                    if (constructor != null)
+                    {
+                        return (UserControl)constructor.Invoke(null);
+                    }
+
+                    MessageBox.Show("No se encontró un constructor adecuado para la vista: " + fullPath);
+                    return null;
                 }
                 else
                 {
@@ -121,6 +168,7 @@ namespace proyectoFinalPOE.Vista
                 return null;
             }
         }
+
 
 
 
@@ -154,6 +202,18 @@ namespace proyectoFinalPOE.Vista
         private void Inicio_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void btnCerrarSesion_Click(object sender, EventArgs e)
+        {
+            Principal loginForm = new Principal();
+            loginForm.Show();
+            this.Hide();
+        }
+
+        private void btnCambiarContraseña_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

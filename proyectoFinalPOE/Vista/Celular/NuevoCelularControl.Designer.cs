@@ -21,83 +21,135 @@
 
         private void InitializeComponent()
         {
-            this.cmbClientes = new ComboBox();
-            this.cmbMarcas = new ComboBox();
-            this.cmbModelos = new ComboBox();
-            this.cmbColores = new ComboBox();
-            this.btnGuardar = new Button();
-            this.btnCancelar = new Button();
-            this.SuspendLayout();
+            cmbClientes = new ComboBox();
+            cmbMarcas = new ComboBox();
+            cmbModelos = new ComboBox();
+            cmbColores = new ComboBox();
+            btnGuardar = new Button();
+            btnCancelar = new Button();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
+            label4 = new Label();
+            SuspendLayout();
             // 
             // cmbClientes
             // 
-            this.cmbClientes.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.cmbClientes.FormattingEnabled = true;
-            this.cmbClientes.Location = new System.Drawing.Point(20, 20);
-            this.cmbClientes.Name = "cmbClientes";
-            this.cmbClientes.Size = new System.Drawing.Size(200, 23);
-            this.cmbClientes.TabIndex = 0;
+            cmbClientes.BackColor = Color.White;
+            cmbClientes.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbClientes.FormattingEnabled = true;
+            cmbClientes.Location = new Point(155, 78);
+            cmbClientes.Name = "cmbClientes";
+            cmbClientes.Size = new Size(200, 23);
+            cmbClientes.TabIndex = 0;
             // 
             // cmbMarcas
             // 
-            this.cmbMarcas.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.cmbMarcas.FormattingEnabled = true;
-            this.cmbMarcas.Location = new System.Drawing.Point(20, 60);
-            this.cmbMarcas.Name = "cmbMarcas";
-            this.cmbMarcas.Size = new System.Drawing.Size(200, 23);
-            this.cmbMarcas.TabIndex = 1;
-            this.cmbMarcas.SelectedIndexChanged += new System.EventHandler(this.cmbMarcas_SelectedIndexChanged);
+            cmbMarcas.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMarcas.FormattingEnabled = true;
+            cmbMarcas.Location = new Point(155, 135);
+            cmbMarcas.Name = "cmbMarcas";
+            cmbMarcas.Size = new Size(200, 23);
+            cmbMarcas.TabIndex = 1;
+            cmbMarcas.SelectedIndexChanged += cmbMarcas_SelectedIndexChanged;
             // 
             // cmbModelos
             // 
-            this.cmbModelos.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.cmbModelos.FormattingEnabled = true;
-            this.cmbModelos.Location = new System.Drawing.Point(20, 100);
-            this.cmbModelos.Name = "cmbModelos";
-            this.cmbModelos.Size = new System.Drawing.Size(200, 23);
-            this.cmbModelos.TabIndex = 2;
+            cmbModelos.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbModelos.FormattingEnabled = true;
+            cmbModelos.Location = new Point(155, 182);
+            cmbModelos.Name = "cmbModelos";
+            cmbModelos.Size = new Size(200, 23);
+            cmbModelos.TabIndex = 2;
             // 
             // cmbColores
             // 
-            this.cmbColores.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.cmbColores.FormattingEnabled = true;
-            this.cmbColores.Location = new System.Drawing.Point(20, 140);
-            this.cmbColores.Name = "cmbColores";
-            this.cmbColores.Size = new System.Drawing.Size(200, 23);
-            this.cmbColores.TabIndex = 3;
+            cmbColores.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbColores.FormattingEnabled = true;
+            cmbColores.Location = new Point(155, 236);
+            cmbColores.Name = "cmbColores";
+            cmbColores.Size = new Size(200, 23);
+            cmbColores.TabIndex = 3;
             // 
             // btnGuardar
             // 
-            this.btnGuardar.Location = new System.Drawing.Point(20, 180);
-            this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(75, 23);
-            this.btnGuardar.TabIndex = 4;
-            this.btnGuardar.Text = "Guardar";
-            this.btnGuardar.UseVisualStyleBackColor = true;
-            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
+            btnGuardar.Location = new Point(155, 302);
+            btnGuardar.Name = "btnGuardar";
+            btnGuardar.Size = new Size(75, 23);
+            btnGuardar.TabIndex = 4;
+            btnGuardar.Text = "Guardar";
+            btnGuardar.UseVisualStyleBackColor = true;
+            btnGuardar.Click += btnGuardar_Click;
             // 
             // btnCancelar
             // 
-            this.btnCancelar.Location = new System.Drawing.Point(145, 180);
-            this.btnCancelar.Name = "btnCancelar";
-            this.btnCancelar.Size = new System.Drawing.Size(75, 23);
-            this.btnCancelar.TabIndex = 5;
-            this.btnCancelar.Text = "Cancelar";
-            this.btnCancelar.UseVisualStyleBackColor = true;
-            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            btnCancelar.Location = new Point(280, 302);
+            btnCancelar.Name = "btnCancelar";
+            btnCancelar.Size = new Size(75, 23);
+            btnCancelar.TabIndex = 5;
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.UseVisualStyleBackColor = true;
+            btnCancelar.Click += btnCancelar_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(79, 81);
+            label1.Name = "label1";
+            label1.Size = new Size(44, 15);
+            label1.TabIndex = 6;
+            label1.Text = "Cliente";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(83, 135);
+            label2.Name = "label2";
+            label2.Size = new Size(40, 15);
+            label2.TabIndex = 7;
+            label2.Text = "Marca";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(79, 179);
+            label3.Name = "label3";
+            label3.Size = new Size(48, 15);
+            label3.TabIndex = 8;
+            label3.Text = "Modelo";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(83, 244);
+            label4.Name = "label4";
+            label4.Size = new Size(36, 15);
+            label4.TabIndex = 9;
+            label4.Text = "Color";
             // 
             // NuevoCelularControl
             // 
-            this.Controls.Add(this.cmbClientes);
-            this.Controls.Add(this.cmbMarcas);
-            this.Controls.Add(this.cmbModelos);
-            this.Controls.Add(this.cmbColores);
-            this.Controls.Add(this.btnGuardar);
-            this.Controls.Add(this.btnCancelar);
-            this.Name = "NuevoCelularControl";
-            this.Size = new System.Drawing.Size(250, 220);
-            this.ResumeLayout(false);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(cmbClientes);
+            Controls.Add(cmbMarcas);
+            Controls.Add(cmbModelos);
+            Controls.Add(cmbColores);
+            Controls.Add(btnGuardar);
+            Controls.Add(btnCancelar);
+            Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Name = "NuevoCelularControl";
+            Size = new Size(496, 417);
+            ResumeLayout(false);
+            PerformLayout();
         }
+
+        private Label label1;
+        private Label label2;
+        private Label label3;
+        private Label label4;
     }
 
 }

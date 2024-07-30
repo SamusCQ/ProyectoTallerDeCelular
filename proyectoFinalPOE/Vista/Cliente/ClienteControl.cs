@@ -10,10 +10,10 @@ namespace proyectoFinalPOE.Vista
     public partial class ClienteControl : UserControl
     {
         private ClienteRepository clienteRepository;
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
         private Panel panelVentana;
 
-        public ClienteControl(DatabaseHelper databaseHelper, Panel panelVentana)
+        public ClienteControl(DatabaseConector databaseHelper, Panel panelVentana)
         {
             InitializeComponent();
             this.databaseHelper = databaseHelper;
@@ -143,6 +143,7 @@ namespace proyectoFinalPOE.Vista
                 MessageBox.Show("Cliente eliminado exitosamente.");
             }
         }
+
+
     }
 }
-

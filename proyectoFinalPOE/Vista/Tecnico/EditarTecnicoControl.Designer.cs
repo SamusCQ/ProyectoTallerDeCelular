@@ -1,6 +1,8 @@
-﻿namespace proyectoFinalPOE.Vista
+﻿using Org.BouncyCastle.Asn1.Crmf;
+
+namespace proyectoFinalPOE.Vista
 {
-    partial class EditarClienteControl
+    partial class EditarTecnicoControl
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -105,7 +107,7 @@
             groupBox1.Size = new Size(459, 307);
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
-            groupBox1.Text = "Editar Cliente";
+            groupBox1.Text = "Editar Tecnico";
             // 
             // label5
             // 
@@ -152,15 +154,16 @@
             label1.TabIndex = 6;
             label1.Text = "Nombres";
             // 
-            // EditarClienteControl
+            // EditarTecnicoControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             Controls.Add(btnCancelar);
             Controls.Add(btnGuardar);
             Controls.Add(groupBox1);
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Name = "EditarClienteControl";
+            Name = "EditarTecnicoControl";
             Size = new Size(496, 417);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
@@ -169,18 +172,18 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtNombre;
-        private System.Windows.Forms.TextBox txtApellido;
-        private System.Windows.Forms.TextBox txtCedula;
-        private System.Windows.Forms.TextBox txtCelular;
-        private System.Windows.Forms.TextBox txtCorreo;
-        private System.Windows.Forms.Button btnGuardar;
-        private System.Windows.Forms.Button btnCancelar;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private TextBox txtNombre;
+        private TextBox txtApellido;
+        private TextBox txtCedula;
+        private TextBox txtCelular;
+        private TextBox txtCorreo;
+        private Button btnGuardar;
+        private Button btnCancelar;
+        private GroupBox groupBox1;
+        private Label label5;
+        private Label label4;
+        private Label label3;
+        private Label label2;
+        private Label label1;
     }
 }

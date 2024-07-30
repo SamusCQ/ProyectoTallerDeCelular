@@ -7,18 +7,18 @@ using System.Windows.Forms;
 
 namespace proyectoFinalPOE.Vista
 {
-    public partial class NuevoClienteControl : UserControl
+    public partial class NuevoTecnicoControl : UserControl
     {
         private DatabaseConector databaseHelper;
         private Panel panelVentana;
-        private ClienteRepository clienteRepository;
+        private TecnicoRepository tecnicoRepository;
 
-        public NuevoClienteControl(DatabaseConector databaseHelper, Panel panelVentana)
+        public NuevoTecnicoControl(DatabaseConector databaseHelper, Panel panelVentana)
         {
             InitializeComponent();
             this.databaseHelper = databaseHelper;
             this.panelVentana = panelVentana;
-            this.clienteRepository = new ClienteRepository(databaseHelper);
+            this.tecnicoRepository = new TecnicoRepository(databaseHelper);
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
@@ -27,7 +27,7 @@ namespace proyectoFinalPOE.Vista
             {
                 try
                 {
-                    Cliente cliente = new Cliente
+                    Tecnico tecnico = new Tecnico
                     {
                         Nombre = txtNombre.Text,
                         Apellido = txtApellido.Text,
@@ -37,32 +37,30 @@ namespace proyectoFinalPOE.Vista
                         BdEst = 1 // Suponiendo que 1 significa activo
                     };
 
-                    clienteRepository.GuardarCliente(cliente);
-                    MessageBox.Show("Cliente guardado exitosamente");
+                    tecnicoRepository.GuardarTecnico(tecnico);
+                    MessageBox.Show("Técnico guardado exitosamente");
 
-                    // Regresar a ClienteControl
-                    ClienteControl clienteControl = new ClienteControl(databaseHelper, panelVentana);
+                    // Regresar a TecnicoControl
+                    TecnicoControl tecnicoControl = new TecnicoControl(databaseHelper, panelVentana);
                     panelVentana.Controls.Clear();
-                    panelVentana.Controls.Add(clienteControl);
-                    clienteControl.Dock = DockStyle.Fill;
+                    panelVentana.Controls.Add(tecnicoControl);
+                    tecnicoControl.Dock = DockStyle.Fill;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al guardar el cliente: " + ex.Message);
+                    MessageBox.Show("Error al guardar el técnico: " + ex.Message);
                 }
             }
         }
 
-
         private void Cancelar_Click(object sender, EventArgs e)
         {
-            // Regresar a ClienteControl
-            ClienteControl clienteControl = new ClienteControl(databaseHelper, panelVentana);
+            // Regresar a TecnicoControl
+            TecnicoControl tecnicoControl = new TecnicoControl(databaseHelper, panelVentana);
             panelVentana.Controls.Clear();
-            panelVentana.Controls.Add(clienteControl);
-            clienteControl.Dock = DockStyle.Fill;
+            panelVentana.Controls.Add(tecnicoControl);
+            tecnicoControl.Dock = DockStyle.Fill;
         }
-
 
         private bool ValidarCampos()
         {
@@ -104,5 +102,3 @@ namespace proyectoFinalPOE.Vista
         }
     }
 }
-
-

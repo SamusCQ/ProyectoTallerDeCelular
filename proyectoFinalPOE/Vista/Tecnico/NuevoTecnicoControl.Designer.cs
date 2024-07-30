@@ -1,9 +1,18 @@
-﻿namespace proyectoFinalPOE.Vista
+﻿using Org.BouncyCastle.Asn1.Crmf;
+
+namespace proyectoFinalPOE.Vista
 {
-    partial class EditarClienteControl
+    partial class NuevoTecnicoControl
     {
+        /// <summary> 
+        /// Variable del diseñador necesaria.
+        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        /// <summary> 
+        /// Limpiar los recursos que se estén usando.
+        /// </summary>
+        /// <param name="disposing">true si los recursos administrados se deben desechar; false en caso contrario.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -15,6 +24,10 @@
 
         #region Código generado por el Diseñador de componentes
 
+        /// <summary> 
+        /// Método necesario para admitir el Diseñador. No se puede modificar
+        /// el contenido de este método con el editor de código.
+        /// </summary>
         private void InitializeComponent()
         {
             txtNombre = new TextBox();
@@ -23,13 +36,13 @@
             txtCelular = new TextBox();
             txtCorreo = new TextBox();
             btnGuardar = new Button();
-            btnCancelar = new Button();
             groupBox1 = new GroupBox();
             label5 = new Label();
             label4 = new Label();
             label3 = new Label();
             label2 = new Label();
-            label1 = new Label();
+            Nombres = new Label();
+            Cancelar = new Button();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -70,7 +83,7 @@
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(259, 271);
+            btnGuardar.Location = new Point(40, 271);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(75, 23);
             btnGuardar.TabIndex = 5;
@@ -78,23 +91,14 @@
             btnGuardar.UseVisualStyleBackColor = true;
             btnGuardar.Click += btnGuardar_Click;
             // 
-            // btnCancelar
-            // 
-            btnCancelar.Location = new Point(340, 271);
-            btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(75, 23);
-            btnCancelar.TabIndex = 6;
-            btnCancelar.Text = "Cancelar";
-            btnCancelar.UseVisualStyleBackColor = true;
-            btnCancelar.Click += btnCancelar_Click;
-            // 
             // groupBox1
             // 
             groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(label2);
-            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(Nombres);
+            groupBox1.Controls.Add(btnGuardar);
             groupBox1.Controls.Add(txtNombre);
             groupBox1.Controls.Add(txtApellido);
             groupBox1.Controls.Add(txtCedula);
@@ -103,9 +107,9 @@
             groupBox1.Location = new Point(15, 30);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(459, 307);
-            groupBox1.TabIndex = 7;
+            groupBox1.TabIndex = 6;
             groupBox1.TabStop = false;
-            groupBox1.Text = "Editar Cliente";
+            groupBox1.Text = "Tecnicos";
             // 
             // label5
             // 
@@ -132,7 +136,7 @@
             label3.Name = "label3";
             label3.Size = new Size(44, 15);
             label3.TabIndex = 8;
-            label3.Text = "Cédula";
+            label3.Text = "Cedula";
             // 
             // label2
             // 
@@ -143,24 +147,34 @@
             label2.TabIndex = 7;
             label2.Text = "Apellidos";
             // 
-            // label1
+            // Nombres
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(40, 49);
-            label1.Name = "label1";
-            label1.Size = new Size(56, 15);
-            label1.TabIndex = 6;
-            label1.Text = "Nombres";
+            Nombres.AutoSize = true;
+            Nombres.Location = new Point(40, 49);
+            Nombres.Name = "Nombres";
+            Nombres.Size = new Size(56, 15);
+            Nombres.TabIndex = 6;
+            Nombres.Text = "Nombres";
             // 
-            // EditarClienteControl
+            // Cancelar
+            // 
+            Cancelar.Location = new Point(18, 343);
+            Cancelar.Name = "Cancelar";
+            Cancelar.Size = new Size(75, 23);
+            Cancelar.TabIndex = 7;
+            Cancelar.Text = "Cancelar";
+            Cancelar.UseVisualStyleBackColor = true;
+            Cancelar.Click += Cancelar_Click;
+            // 
+            // NuevoTecnicoControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(btnCancelar);
-            Controls.Add(btnGuardar);
+            BackColor = Color.White;
+            Controls.Add(Cancelar);
             Controls.Add(groupBox1);
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Name = "EditarClienteControl";
+            Name = "NuevoTecnicoControl";
             Size = new Size(496, 417);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
@@ -169,18 +183,19 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtNombre;
-        private System.Windows.Forms.TextBox txtApellido;
-        private System.Windows.Forms.TextBox txtCedula;
-        private System.Windows.Forms.TextBox txtCelular;
-        private System.Windows.Forms.TextBox txtCorreo;
-        private System.Windows.Forms.Button btnGuardar;
-        private System.Windows.Forms.Button btnCancelar;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private TextBox txtNombre;
+        private TextBox txtApellido;
+        private TextBox txtCedula;
+        private TextBox txtCelular;
+        private TextBox txtCorreo;
+        private Button btnGuardar;
+        private GroupBox groupBox1;
+        private Label label5;
+        private Label label4;
+        private Label label3;
+        private Label label2;
+        private Label Nombres;
+        private Button Cancelar;
     }
 }
+

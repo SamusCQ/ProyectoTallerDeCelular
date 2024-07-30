@@ -11,12 +11,12 @@ namespace proyectoFinalPOE
     public partial class Principal : Form
     {
         private UsuarioService usuarioService;
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
 
         public Principal()
         {
             InitializeComponent();
-            databaseHelper = new DatabaseHelper();
+            databaseHelper = new DatabaseConector();
             usuarioService = new UsuarioService(databaseHelper);
 
             var usuarios = usuarioService.ObtenerUsuarios();

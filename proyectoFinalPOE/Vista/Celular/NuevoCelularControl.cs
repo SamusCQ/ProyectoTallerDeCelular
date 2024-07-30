@@ -13,10 +13,10 @@ namespace proyectoFinalPOE.Vista
         private ClienteRepository clienteRepository;
         private ModeloCelularRepository modeloCelularRepository;
         private ColorRepository colorRepository;
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
         private Panel panelVentana;
 
-        public NuevoCelularControl(DatabaseHelper databaseHelper, Panel panelVentana)
+        public NuevoCelularControl(DatabaseConector databaseHelper, Panel panelVentana)
         {
             InitializeComponent();
             this.databaseHelper = databaseHelper;

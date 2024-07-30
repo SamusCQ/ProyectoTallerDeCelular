@@ -8,14 +8,14 @@ namespace proyectoFinalPOE.Vista.Repuesto
 {
     public partial class NuevoRepuestoControl : UserControl
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
         private RepuestoRepository repuestoRepository;
         private MarcaRepository marcaRepository;
         private ModeloCelularRepository modeloCelularRepository;
         private TipoRepuestoRepository tipoRepuestoRepository;
         private Panel panelVentana;
 
-        public NuevoRepuestoControl(DatabaseHelper databaseHelper, Panel panelVentana)
+        public NuevoRepuestoControl(DatabaseConector databaseHelper, Panel panelVentana)
         {
             InitializeComponent();
             this.databaseHelper = databaseHelper;

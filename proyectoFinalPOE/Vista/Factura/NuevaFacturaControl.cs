@@ -12,13 +12,13 @@ namespace proyectoFinalPOE.Vista
 {
     public partial class NuevaFacturaControl : UserControl
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
         private FacturaRepository facturaRepository;
         private ClienteRepository clienteRepository;
         private ReparacionRepository reparacionRepository;
         private Panel panelVentana;
 
-        public NuevaFacturaControl(DatabaseHelper databaseHelper, Panel panelVentana)
+        public NuevaFacturaControl(DatabaseConector databaseHelper, Panel panelVentana)
         {
             InitializeComponent();
             this.databaseHelper = databaseHelper;
@@ -68,7 +68,12 @@ namespace proyectoFinalPOE.Vista
                 };
 
                 facturaRepository.AgregarFactura(nuevaFactura);
+
+                // Actualizar el estado de la reparación a "entregado" (idEstado = 4)
+                reparacionRepository.ActualizarEstadoReparacion(idReparacion, 4);
+
                 MessageBox.Show("Factura creada exitosamente.");
+                VolverALista();
             }
             else
             {
@@ -105,6 +110,16 @@ namespace proyectoFinalPOE.Vista
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             VolverALista();
+        }
+
+        private void cmbReparaciones_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cmbClientes_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

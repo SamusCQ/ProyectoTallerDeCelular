@@ -9,11 +9,11 @@ namespace proyectoFinalPOE.Negocio
 {
     public class ReparacionService
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
 
         public ReparacionService()
         {
-            databaseHelper = new DatabaseHelper();
+            databaseHelper = new DatabaseConector();
         }
 
         // Métodos de lógica de negocio para reparaciones

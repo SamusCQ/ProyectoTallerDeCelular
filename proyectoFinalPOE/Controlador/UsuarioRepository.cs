@@ -9,9 +9,9 @@ namespace proyectoFinalPOE.Repositorio
 {
     public class UsuarioRepository
     {
-        private readonly DatabaseHelper databaseHelper;
+        private readonly DatabaseConector databaseHelper;
 
-        public UsuarioRepository(DatabaseHelper databaseHelper)
+        public UsuarioRepository(DatabaseConector databaseHelper)
         {
             this.databaseHelper = databaseHelper;
         }

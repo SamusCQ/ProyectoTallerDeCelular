@@ -9,9 +9,9 @@ namespace proyectoFinalPOE.Repositorio
 {
     public class FacturaRepository
     {
-        private readonly DatabaseHelper databaseHelper;
+        private readonly DatabaseConector databaseHelper;
 
-        public FacturaRepository(DatabaseHelper databaseHelper)
+        public FacturaRepository(DatabaseConector databaseHelper)
         {
             this.databaseHelper = databaseHelper;
         }
@@ -79,13 +79,13 @@ namespace proyectoFinalPOE.Repositorio
 
         public DataTable GetFacturaById(int idFactura)
         {
-            DataTable dtFactura = new DataTable();
-
+            DataTable facturaData = new DataTable();
             using (SqlConnection connection = databaseHelper.GetConnection())
             {
                 string query = @"
             SELECT 
                 f.idFactura,
+                f.idReparacion, -- Asegúrate de seleccionar el idReparacion aquí
                 n.nombre AS Negocio,
                 r.descripcion AS Reparacion,
                 c.nombre AS Cliente,
@@ -94,19 +94,20 @@ namespace proyectoFinalPOE.Repositorio
                 e.descripcion AS Estado
             FROM FACTURA f
             JOIN NEGOCIO n ON f.idNegocio = n.idNegocio
-            JOIN REPARACIONes r ON f.idReparacion = r.idReparacion
+            JOIN REPARACIONES r ON f.idReparacion = r.idReparacion
             JOIN CLIENTE c ON f.idCliente = c.idCliente
             JOIN ESTADO e ON f.bd_est = e.idEstado
-            WHERE f.idFactura = @idFactura";
+            WHERE f.idFactura = @idFactura AND f.bd_est = 1";
 
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@idFactura", idFactura);
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
-                adapter.Fill(dtFactura);
-            }
 
-            return dtFactura;
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+                adapter.Fill(facturaData);
+            }
+            return facturaData;
         }
+
 
     }
 }

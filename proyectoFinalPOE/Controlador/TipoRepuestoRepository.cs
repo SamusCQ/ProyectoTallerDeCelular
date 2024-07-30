@@ -7,9 +7,9 @@ namespace proyectoFinalPOE.Repositorio
 {
     public class TipoRepuestoRepository
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
 
-        public TipoRepuestoRepository(DatabaseHelper databaseHelper)
+        public TipoRepuestoRepository(DatabaseConector databaseHelper)
         {
             this.databaseHelper = databaseHelper;
         }

@@ -9,14 +9,14 @@ namespace proyectoFinalPOE.Vista.Repuesto
     public partial class EditarRepuestoControl : UserControl
     {
         private int idRepuesto;
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
         private RepuestoRepository repuestoRepository;
         private MarcaRepository marcaRepository;
         private ModeloCelularRepository modeloCelularRepository;
         private TipoRepuestoRepository tipoRepuestoRepository;
         private Panel panelVentana;
 
-        public EditarRepuestoControl(int idRepuesto, DatabaseHelper databaseHelper, Panel panelVentana)
+        public EditarRepuestoControl(int idRepuesto, DatabaseConector databaseHelper, Panel panelVentana)
         {
             InitializeComponent();
             this.idRepuesto = idRepuesto;

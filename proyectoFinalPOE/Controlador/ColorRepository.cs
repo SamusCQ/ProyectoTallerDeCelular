@@ -8,9 +8,9 @@ namespace proyectoFinalPOE.Repositorio
 {
     public class ColorRepository
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
 
-        public ColorRepository(DatabaseHelper databaseHelper)
+        public ColorRepository(DatabaseConector databaseHelper)
         {
             this.databaseHelper = databaseHelper;
         }

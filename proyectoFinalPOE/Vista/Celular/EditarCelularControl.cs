@@ -9,14 +9,14 @@ namespace proyectoFinalPOE.Vista
     public partial class EditarCelularControl : UserControl
     {
         private int idCelular;
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
         private CelularRepository celularRepository;
         private MarcaRepository marcaRepository;
         private ModeloCelularRepository modeloCelularRepository;
         private ColorRepository colorRepository;
         private Panel panelVentana;
 
-        public EditarCelularControl(int idCelular, DatabaseHelper databaseHelper, Panel panelVentana)
+        public EditarCelularControl(int idCelular, DatabaseConector databaseHelper, Panel panelVentana)
         {
             InitializeComponent();
             this.idCelular = idCelular;

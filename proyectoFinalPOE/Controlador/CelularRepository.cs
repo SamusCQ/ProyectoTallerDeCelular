@@ -7,9 +7,9 @@ namespace proyectoFinalPOE.Repositorio
 {
     public class CelularRepository
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
 
-        public CelularRepository(DatabaseHelper databaseHelper)
+        public CelularRepository(DatabaseConector databaseHelper)
         {
             this.databaseHelper = databaseHelper;
         }
@@ -92,13 +92,6 @@ namespace proyectoFinalPOE.Repositorio
             }
             return celular;
         }
-
-
-
-
-
-
-
 
         public void ActualizarCelular(Celular celular)
         {
@@ -264,13 +257,6 @@ namespace proyectoFinalPOE.Repositorio
 
             return celular;
         }
-
-
-
-
-
-
-
 
     }
 }

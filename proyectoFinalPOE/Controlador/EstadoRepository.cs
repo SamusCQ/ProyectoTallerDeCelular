@@ -7,9 +7,9 @@ namespace proyectoFinalPOE.Repositorio
 {
     public class EstadoRepository
     {
-        private DatabaseHelper databaseHelper;
+        private DatabaseConector databaseHelper;
 
-        public EstadoRepository(DatabaseHelper databaseHelper)
+        public EstadoRepository(DatabaseConector databaseHelper)
         {
             this.databaseHelper = databaseHelper;
         }
