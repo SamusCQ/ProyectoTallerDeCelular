@@ -126,8 +126,8 @@ namespace proyectoFinalPOE.Repositorio
             using (SqlConnection connection = databaseHelper.GetConnection())
             {
                 string query = @"
-        INSERT INTO REPUESTOS (idMarca, idModelo, descripcion, idTipo, valor, bd_est, cantidad, fechaIngreso)
-        VALUES (@idMarca, @idModelo, @descripcion, @idTipo, @valor, @bdEst, @cantidad, @fechaIngreso)";
+                INSERT INTO REPUESTOS (idMarca, idModelo, descripcion, idTipo, valor, bd_est, cantidad, fechaIngreso)
+                VALUES (@idMarca, @idModelo, @descripcion, @idTipo, @valor, @bdEst, @cantidad, @fechaIngreso)";
 
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@idMarca", repuesto.IdMarca);
