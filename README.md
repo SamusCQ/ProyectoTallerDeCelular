@@ -47,6 +47,3 @@ Si necesitas cambiar el nombre del servidor, usar otro tipo de autenticación o 
   ```csharp
   Server=.\SQLEXPRESS;Database=DbCelular;User Id=usuario;Password=contraseña;
   ```
-
-## Contribuciones
-Si tienes sugerencias, mejoras o encuentras algún problema, por favor abre un **issue** o realiza un **pull request**.
