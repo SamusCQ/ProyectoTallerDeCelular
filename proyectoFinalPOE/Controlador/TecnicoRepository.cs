@@ -1,212 +1,212 @@
 ﻿using proyectoFinalPOE.Controlador;
 using proyectoFinalPOE.Modelo;
-using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 
 namespace proyectoFinalPOE.Repositorio
 {
-    public class TecnicoRepository
+    public class RepuestoRepository
     {
         private DatabaseConector databaseHelper;
 
-        public TecnicoRepository(DatabaseConector databaseHelper)
+        // Constructor que recibe un objeto para gestionar la conexión con la base de datos
+        public RepuestoRepository(DatabaseConector databaseHelper)
         {
-            this.databaseHelper = databaseHelper;
+            this.databaseHelper = databaseHelper; // Se asigna el objeto de conexión a la propiedad de la clase.
         }
 
-        public List<Tecnico> GetTecnicos()
+        // Método para obtener todos los repuestos disponibles con sus detalles
+        public List<Repuesto> GetRepuestos()
         {
-            List<Tecnico> tecnicos = new List<Tecnico>();
+            List<Repuesto> repuestos = new List<Repuesto>(); // Lista para almacenar los repuestos.
 
             using (SqlConnection connection = databaseHelper.GetConnection())
             {
+                // Consulta SQL que obtiene los repuestos con detalles de marca, modelo y tipo.
                 string query = @"
-        SELECT idTecnico, nombre, apellido, nu_cedula, nu_celular, correo, bd_est, (apellido + ' ' + nombre) AS nombre_completo
-        FROM TECNICO
-        WHERE bd_est = 1";
+                SELECT r.idRepuesto, r.idMarca, r.idModelo, r.descripcion, r.idTipo, r.valor, r.cantidad, r.bd_est,
+                       m.descripcion AS MarcaDescripcion, mo.descripcion AS ModeloDescripcion, t.descripcion AS TipoDescripcion
+                FROM REPUESTOS r
+                JOIN MARCA m ON r.idMarca = m.idMarca
+                JOIN MODELO_CELULAR mo ON r.idModelo = mo.idModelo
+                JOIN TIPO_REPUESTO t ON r.idTipo = t.idTipo
+                WHERE r.bd_est = 1"; // Se filtra por repuestos activos (bd_est = 1).
 
-                SqlCommand command = new SqlCommand(query, connection);
-                connection.Open();
+                SqlCommand command = new SqlCommand(query, connection); // Se crea el comando SQL con la consulta.
+                connection.Open(); // Se abre la conexión con la base de datos.
 
+                // Ejecutamos la consulta y recorremos los resultados.
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        Tecnico tecnico = new Tecnico
+                        // Creamos un objeto de tipo Repuesto y le asignamos los valores obtenidos de la base de datos.
+                        Repuesto repuesto = new Repuesto
                         {
-                            IdTecnico = reader.GetInt32(0),
-                            Nombre = reader.GetString(1),
-                            Apellido = reader.GetString(2),
-                            NuCedula = reader.GetString(3),
-                            NuCelular = reader.GetString(4),
-                            Correo = reader.GetString(5),
-                            BdEst = reader.GetInt32(6),
-                            NombreCompleto = reader.GetString(7)
+                            IdRepuesto = reader.GetInt32(0),
+                            IdMarca = reader.GetInt32(1),
+                            IdModelo = reader.GetInt32(2),
+                            Descripcion = reader.GetString(3),
+                            IdTipo = reader.GetInt32(4),
+                            Valor = reader.GetDecimal(5),
+                            Cantidad = reader.GetInt32(6),
+                            BdEst = reader.GetInt32(7),
+                            MarcaDescripcion = reader.GetString(8),
+                            ModeloDescripcion = reader.GetString(9),
+                            TipoDescripcion = reader.GetString(10)
                         };
-                        tecnicos.Add(tecnico);
+                        repuestos.Add(repuesto); // Añadimos el repuesto a la lista.
                     }
                 }
             }
 
-            return tecnicos;
+            return repuestos; // Devolvemos la lista de repuestos obtenidos.
         }
 
-        public List<Tecnico> BuscarTecnicosPorNombre(string nombre)
+        // Método para obtener un repuesto por su ID.
+        public Repuesto ObtenerRepuestoPorId(int idRepuesto)
         {
-            List<Tecnico> tecnicos = new List<Tecnico>();
+            Repuesto repuesto = null; // Inicializamos como null el repuesto.
+
             using (SqlConnection connection = databaseHelper.GetConnection())
             {
-                string query = "sp_BuscarTecnicosPorNombre";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@nombre", nombre);
-                connection.Open();
+                // Consulta SQL para obtener un repuesto específico por su ID.
+                string query = @"
+        SELECT idRepuesto, idMarca, idModelo, descripcion, idTipo, valor, bd_est, cantidad, fechaIngreso
+        FROM REPUESTOS
+        WHERE idRepuesto = @idRepuesto"; // Se usa el parámetro idRepuesto para buscar el repuesto.
+
+                SqlCommand command = new SqlCommand(query, connection); // Creamos el comando SQL.
+                command.Parameters.AddWithValue("@idRepuesto", idRepuesto); // Asignamos el valor del parámetro.
+                connection.Open(); // Abrimos la conexión.
+
+                // Ejecutamos la consulta y obtenemos el repuesto.
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read()) // Si se encuentra el repuesto
+                    {
+                        repuesto = new Repuesto
+                        {
+                            IdRepuesto = reader.GetInt32(0),
+                            IdMarca = reader.GetInt32(1),
+                            IdModelo = reader.GetInt32(2),
+                            Descripcion = reader.GetString(3),
+                            IdTipo = reader.GetInt32(4),
+                            Valor = reader.GetDecimal(5),
+                            BdEst = reader.GetInt32(6),
+                            Cantidad = reader.GetInt32(7),
+                            FechaIngreso = reader.GetDateTime(8)
+                        };
+                    }
+                }
+            }
+
+            return repuesto; // Devolvemos el repuesto encontrado o null si no se encuentra.
+        }
+
+        // Método para actualizar los detalles de un repuesto.
+        public void ActualizarRepuesto(Repuesto repuesto)
+        {
+            using (SqlConnection connection = databaseHelper.GetConnection())
+            {
+                // Consulta SQL para actualizar los datos de un repuesto.
+                string query = @"
+        UPDATE REPUESTOS
+        SET idMarca = @idMarca, idModelo = @idModelo, descripcion = @descripcion, idTipo = @idTipo, valor = @valor, bd_est = @bdEst, cantidad = @cantidad, fechaIngreso = @fechaIngreso
+        WHERE idRepuesto = @idRepuesto"; // Usamos el ID del repuesto para encontrarlo y actualizar sus valores.
+
+                SqlCommand command = new SqlCommand(query, connection); // Creamos el comando SQL.
+                command.Parameters.AddWithValue("@idMarca", repuesto.IdMarca); // Asignamos los valores del repuesto.
+                command.Parameters.AddWithValue("@idModelo", repuesto.IdModelo);
+                command.Parameters.AddWithValue("@descripcion", repuesto.Descripcion);
+                command.Parameters.AddWithValue("@idTipo", repuesto.IdTipo);
+                command.Parameters.AddWithValue("@valor", repuesto.Valor);
+                command.Parameters.AddWithValue("@bdEst", repuesto.BdEst);
+                command.Parameters.AddWithValue("@cantidad", repuesto.Cantidad);
+                command.Parameters.AddWithValue("@fechaIngreso", repuesto.FechaIngreso);
+                command.Parameters.AddWithValue("@idRepuesto", repuesto.IdRepuesto); // Se usa el ID para identificar el repuesto a actualizar.
+                connection.Open(); // Abrimos la conexión.
+                command.ExecuteNonQuery(); // Ejecutamos la actualización.
+            }
+        }
+
+        // Método para agregar un nuevo repuesto.
+        public void AgregarRepuesto(Repuesto repuesto)
+        {
+            using (SqlConnection connection = databaseHelper.GetConnection())
+            {
+                // Consulta SQL para insertar un nuevo repuesto en la base de datos.
+                string query = @"
+                INSERT INTO REPUESTOS (idMarca, idModelo, descripcion, idTipo, valor, bd_est, cantidad, fechaIngreso)
+                VALUES (@idMarca, @idModelo, @descripcion, @idTipo, @valor, @bdEst, @cantidad, @fechaIngreso)";
+
+                SqlCommand command = new SqlCommand(query, connection); // Creamos el comando SQL.
+                command.Parameters.AddWithValue("@idMarca", repuesto.IdMarca); // Asignamos los parámetros del nuevo repuesto.
+                command.Parameters.AddWithValue("@idModelo", repuesto.IdModelo);
+                command.Parameters.AddWithValue("@descripcion", repuesto.Descripcion);
+                command.Parameters.AddWithValue("@idTipo", repuesto.IdTipo);
+                command.Parameters.AddWithValue("@valor", repuesto.Valor);
+                command.Parameters.AddWithValue("@bdEst", repuesto.BdEst);
+                command.Parameters.AddWithValue("@cantidad", repuesto.Cantidad);
+                command.Parameters.AddWithValue("@fechaIngreso", repuesto.FechaIngreso);
+                connection.Open(); // Abrimos la conexión.
+                command.ExecuteNonQuery(); // Ejecutamos la inserción del nuevo repuesto.
+            }
+        }
+
+        // Método para eliminar un repuesto por su ID.
+        public void EliminarRepuesto(int idRepuesto)
+        {
+            using (SqlConnection connection = databaseHelper.GetConnection())
+            {
+                // Consulta SQL para eliminar un repuesto de la base de datos.
+                string query = "DELETE FROM REPUESTOS WHERE idRepuesto = @idRepuesto"; // Eliminamos por ID.
+                SqlCommand command = new SqlCommand(query, connection); // Creamos el comando SQL.
+                command.Parameters.AddWithValue("@idRepuesto", idRepuesto); // Asignamos el parámetro del ID.
+                connection.Open(); // Abrimos la conexión.
+                command.ExecuteNonQuery(); // Ejecutamos la eliminación.
+            }
+        }
+
+        // Método para buscar repuestos por descripción (parcial).
+        public List<Repuesto> BuscarRepuestosPorDescripcion(string descripcion)
+        {
+            List<Repuesto> repuestos = new List<Repuesto>(); // Lista para almacenar los resultados de búsqueda.
+
+            using (SqlConnection connection = databaseHelper.GetConnection())
+            {
+                // Consulta SQL para buscar repuestos que contengan la descripción proporcionada.
+                string query = @"
+                SELECT idRepuesto, idMarca, idModelo, descripcion, idTipo, valor, bd_est
+                FROM REPUESTOS
+                WHERE bd_est = 1 AND descripcion LIKE @descripcion"; // Se usa LIKE para búsqueda parcial.
+
+                SqlCommand command = new SqlCommand(query, connection); // Creamos el comando SQL.
+                command.Parameters.AddWithValue("@descripcion", "%" + descripcion + "%"); // Asignamos el parámetro con el patrón de búsqueda.
+                connection.Open(); // Abrimos la conexión.
+
+                // Ejecutamos la consulta y recorremos los resultados.
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        Tecnico tecnico = new Tecnico
+                        // Creamos un repuesto con los datos obtenidos.
+                        Repuesto repuesto = new Repuesto
                         {
-                            IdTecnico = reader.GetInt32(0),
-                            Nombre = reader.GetString(1),
-                            Apellido = reader.GetString(2),
-                            NuCedula = reader.GetString(3),
-                            NuCelular = reader.GetString(4),
-                            Correo = reader.GetString(5),
-                            BdEst = reader.GetInt32(6),
-                            NombreCompleto = reader.GetString(7)
+                            IdRepuesto = reader.GetInt32(0),
+                            IdMarca = reader.GetInt32(1),
+                            IdModelo = reader.GetInt32(2),
+                            Descripcion = reader.GetString(3),
+                            IdTipo = reader.GetInt32(4),
+                            Valor = reader.GetDecimal(5),
+                            BdEst = reader.GetInt32(6)
                         };
-                        tecnicos.Add(tecnico);
+                        repuestos.Add(repuesto); // Añadimos el repuesto a la lista.
                     }
                 }
             }
-            return tecnicos;
-        }
 
-        public Tecnico ObtenerTecnicoPorId(int idTecnico)
-        {
-            Tecnico tecnico = null;
-            using (SqlConnection connection = databaseHelper.GetConnection())
-            {
-                string query = "sp_ObtenerTecnicoPorId";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@idTecnico", idTecnico);
-                connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        tecnico = new Tecnico
-                        {
-                            IdTecnico = reader.GetInt32(0),
-                            Nombre = reader.GetString(1),
-                            Apellido = reader.GetString(2),
-                            NuCedula = reader.GetString(3),
-                            NuCelular = reader.GetString(4),
-                            Correo = reader.GetString(5),
-                            BdEst = reader.GetInt32(6),
-                            NombreCompleto = reader.GetString(7)
-                        };
-                    }
-                }
-            }
-            return tecnico;
-        }
-
-        public void GuardarTecnico(Tecnico tecnico)
-        {
-            using (SqlConnection connection = databaseHelper.GetConnection())
-            {
-                SqlTransaction transaction = null;
-                try
-                {
-                    connection.Open();
-                    transaction = connection.BeginTransaction();
-
-                    // Insertar técnico
-                    string queryTecnico = @"
-                INSERT INTO TECNICO (nombre, apellido, nu_cedula, nu_celular, correo, bd_est) 
-                VALUES (@nombre, @apellido, @nu_cedula, @nu_celular, @correo, @bd_est);
-                SELECT SCOPE_IDENTITY();";
-                    SqlCommand commandTecnico = new SqlCommand(queryTecnico, connection, transaction);
-                    commandTecnico.Parameters.AddWithValue("@nombre", tecnico.Nombre);
-                    commandTecnico.Parameters.AddWithValue("@apellido", tecnico.Apellido);
-                    commandTecnico.Parameters.AddWithValue("@nu_cedula", tecnico.NuCedula);
-                    commandTecnico.Parameters.AddWithValue("@nu_celular", tecnico.NuCelular);
-                    commandTecnico.Parameters.AddWithValue("@correo", tecnico.Correo);
-                    commandTecnico.Parameters.AddWithValue("@bd_est", tecnico.BdEst);
-
-                    int tecnicoId = Convert.ToInt32(commandTecnico.ExecuteScalar());
-
-                    // Crear usuario
-                    string queryUsuario = @"
-                INSERT INTO USUARIO (Usuario, clave, idTecnico, bd_est) 
-                VALUES (@Usuario, @clave, @idTecnico, @bd_est);
-                SELECT SCOPE_IDENTITY();";
-                    SqlCommand commandUsuario = new SqlCommand(queryUsuario, connection, transaction);
-                    commandUsuario.Parameters.AddWithValue("@Usuario", tecnico.NuCedula);
-                    commandUsuario.Parameters.AddWithValue("@clave", "123");
-                    commandUsuario.Parameters.AddWithValue("@idTecnico", tecnicoId);
-                    commandUsuario.Parameters.AddWithValue("@bd_est", 1);
-
-                    int usuarioId = Convert.ToInt32(commandUsuario.ExecuteScalar());
-
-                    // Asignar rol de técnico
-                    string queryRolUsuario = @"
-                INSERT INTO rol_usuario (idUsuario, idRol) 
-                VALUES (@idUsuario, @idRol);";
-                    SqlCommand commandRolUsuario = new SqlCommand(queryRolUsuario, connection, transaction);
-                    commandRolUsuario.Parameters.AddWithValue("@idUsuario", usuarioId);
-                    commandRolUsuario.Parameters.AddWithValue("@idRol", 1);
-
-                    commandRolUsuario.ExecuteNonQuery();
-
-                    // Commit transaction
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    if (transaction != null)
-                    {
-                        transaction.Rollback();
-                    }
-                    throw new Exception("Error al guardar el técnico: " + ex.Message);
-                }
-            }
-        }
-
-        public void ActualizarTecnico(Tecnico tecnico)
-        {
-            using (SqlConnection connection = databaseHelper.GetConnection())
-            {
-                string query = "sp_ActualizarTecnico";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@idTecnico", tecnico.IdTecnico);
-                command.Parameters.AddWithValue("@nombre", tecnico.Nombre);
-                command.Parameters.AddWithValue("@apellido", tecnico.Apellido);
-                command.Parameters.AddWithValue("@nu_cedula", tecnico.NuCedula);
-                command.Parameters.AddWithValue("@nu_celular", tecnico.NuCelular);
-                command.Parameters.AddWithValue("@correo", tecnico.Correo);
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-        }
-
-        public void EliminarTecnico(int idTecnico)
-        {
-            using (SqlConnection connection = databaseHelper.GetConnection())
-            {
-                string query = "sp_EliminarTecnico";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@idTecnico", idTecnico);
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
+            return repuestos; // Devolvemos la lista de repuestos encontrados.
         }
     }
 }

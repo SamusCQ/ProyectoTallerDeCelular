@@ -11,7 +11,7 @@ namespace proyectoFinalPOE.Repositorio
 
         public MarcaRepository(DatabaseConector databaseHelper)
         {
-            this.databaseHelper = databaseHelper;
+            this.databaseHelper = databaseHelper; // Permite reutilizar la conexión a la base de datos mediante inyección de dependencias.
         }
 
         public List<Marca> GetMarcas()
@@ -20,7 +20,7 @@ namespace proyectoFinalPOE.Repositorio
 
             using (SqlConnection connection = databaseHelper.GetConnection())
             {
-                string query = "SELECT IdMarca, Descripcion FROM MARCA WHERE bd_est = 1";
+                string query = "SELECT IdMarca, Descripcion FROM MARCA WHERE bd_est = 1"; // Recupera marcas activas con su descripción.
                 SqlCommand command = new SqlCommand(query, connection);
                 connection.Open();
 
@@ -28,16 +28,17 @@ namespace proyectoFinalPOE.Repositorio
                 {
                     while (reader.Read())
                     {
+                        // Crea una instancia de Marca para cada fila del resultado.
                         Marca marca = new Marca
                         {
-                            IdMarca = reader.GetInt32(0),
-                            Descripcion = reader.GetString(1)
+                            IdMarca = reader.GetInt32(0), // Lee el identificador de la marca.
+                            Descripcion = reader.GetString(1) // Lee la descripción asociada.
                         };
-                        marcas.Add(marca);
+                        marcas.Add(marca); // Agrega la marca a la lista.
                     }
                 }
             }
-            return marcas;
+            return marcas; // Retorna todas las marcas activas.
         }
 
         public string ObtenerDescripcionPorId(int idMarca)
@@ -46,21 +47,19 @@ namespace proyectoFinalPOE.Repositorio
 
             using (SqlConnection connection = databaseHelper.GetConnection())
             {
-                string query = "SELECT Descripcion FROM MARCA WHERE IdMarca = @IdMarca";
+                string query = "SELECT Descripcion FROM MARCA WHERE IdMarca = @IdMarca"; // Obtiene la descripción de una marca específica por su ID.
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@IdMarca", idMarca);
+                command.Parameters.AddWithValue("@IdMarca", idMarca); // Parametriza el ID de la marca para evitar inyecciones SQL.
                 connection.Open();
 
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    descripcion = reader.GetString(0);
+                    descripcion = reader.GetString(0); // Asigna la descripción obtenida del resultado.
                 }
             }
 
-            return descripcion;
+            return descripcion; // Retorna la descripción encontrada o un string vacío si no existe.
         }
-
     }
 }
-
