@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlClient;
 
+
 namespace proyectoFinalPOE.Controlador
 {
     public class DatabaseConector
@@ -8,7 +9,7 @@ namespace proyectoFinalPOE.Controlador
 
         public DatabaseConector()
         {
-            connectionString = "Data Source=DESKTOP-GQ6ROQ2\\SQLEXPRESS;Initial Catalog=DbCelular;Integrated Security=True";
+            connectionString = @"Server=.\SQLEXPRESS;Database=DbCelular;Trusted_Connection=True";
         }
 
         public SqlConnection GetConnection()
